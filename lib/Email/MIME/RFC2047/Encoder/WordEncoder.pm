@@ -1,4 +1,4 @@
-package Email::RFC2047::Encoder::WordEncoder;
+package Email::MIME::RFC2047::Encoder::WordEncoder;
 
 use strict;
 

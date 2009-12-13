@@ -1,10 +1,10 @@
-package Email::RFC2047::Encoder;
+package Email::MIME::RFC2047::Encoder;
 
 use strict;
 
-use Email::RFC2047::Encoder::MIME_B;
-use Email::RFC2047::Encoder::MIME_Q;
-use Email::RFC2047::Encoder::Quoted;
+use Email::MIME::RFC2047::Encoder::MIME_B;
+use Email::MIME::RFC2047::Encoder::MIME_Q;
+use Email::MIME::RFC2047::Encoder::Quoted;
 
 sub new {
     my $package = shift;
@@ -45,10 +45,10 @@ sub _encode {
 
     my $result = '';
 
-    my $quoted_encoder = Email::RFC2047::Encoder::Quoted->new(
+    my $quoted_encoder = Email::MIME::RFC2047::Encoder::Quoted->new(
         result => \$result,
     ) if $mode eq 'phrase';
-    my $mime_package = "Email::RFC2047::Encoder::MIME_$self->{method}";
+    my $mime_package = "Email::MIME::RFC2047::Encoder::MIME_$self->{method}";
     my $mime_encoder = $mime_package->new(
         result => \$result,
         encoding => $self->{encoding},
@@ -105,13 +105,13 @@ __END__
 
 =head1 NAME
 
-Email::RFC2047::Encoder - Encoding of non-ASCII MIME headers
+Email::MIME::RFC2047::Encoder - Encoding of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
- use Email::RFC2047::Encoder;
+ use Email::MIME::RFC2047::Encoder;
  
- my $encoder = Email::RFC2047::Encoder->new(
+ my $encoder = Email::MIME::RFC2047::Encoder->new(
      encoding => 'utf-8',
      method   => 'Q',
  );
@@ -128,7 +128,7 @@ RFC 2047.
 
 =head2 new
 
- my $encoder = Email::RFC2047::Encoder->new(
+ my $encoder = Email::MIME::RFC2047::Encoder->new(
      encoding => $encoding,
      method   => $method,
  );

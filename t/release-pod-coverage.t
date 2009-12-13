@@ -19,5 +19,5 @@ plan skip_all => "Pod::Coverage::TrustPod required for testing POD coverage"
   if $@;
 
 my $parms = { coverage_class => 'Pod::Coverage::TrustPod' };
-pod_coverage_ok("Email::RFC2047::Encoder");
-pod_coverage_ok("Email::RFC2047::Decoder");
+pod_coverage_ok("Email::MIME::RFC2047::Encoder");
+pod_coverage_ok("Email::MIME::RFC2047::Decoder");

@@ -1,4 +1,4 @@
-package Email::RFC2047::Decoder;
+package Email::MIME::RFC2047::Decoder;
 
 use strict;
 
@@ -92,13 +92,13 @@ __END__
 
 =head1 NAME
 
-Email::RFC2047::Decoder - Decoding of non-ASCII MIME headers
+Email::MIME::RFC2047::Decoder - Decoding of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
- use Email::RFC2047::Decoder;
+ use Email::MIME::RFC2047::Decoder;
  
- my $decoder = Email::RFC2047::Decoder->new();
+ my $decoder = Email::MIME::RFC2047::Decoder->new();
  
  my $string = $decoder->decode_text($encoded_text);
  my $string = $decoder->decode_phrase($encoded_phrase);
@@ -112,7 +112,7 @@ text according to RFC 2047.
 
 =head2 new
 
- my $decoder = Email::RFC2047::Decoder->new();
+ my $decoder = Email::MIME::RFC2047::Decoder->new();
 
 Creates a new decoder object.
 

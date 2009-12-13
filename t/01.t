@@ -3,14 +3,14 @@ use utf8;
 use Test::More tests => 4 + 11 * 2;
 
 BEGIN {
-    use_ok('Email::RFC2047::Encoder');
-    use_ok('Email::RFC2047::Decoder');
+    use_ok('Email::MIME::RFC2047::Encoder');
+    use_ok('Email::MIME::RFC2047::Decoder');
 };
 
-my $encoder = Email::RFC2047::Encoder->new();
+my $encoder = Email::MIME::RFC2047::Encoder->new();
 ok(defined($encoder), 'new');
 
-my $decoder = Email::RFC2047::Decoder->new();
+my $decoder = Email::MIME::RFC2047::Decoder->new();
 ok(defined($decoder), 'new');
 
 my @tests = (

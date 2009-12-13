@@ -1,8 +1,8 @@
-package Email::RFC2047::Encoder::Quoted;
+package Email::MIME::RFC2047::Encoder::Quoted;
 
 use strict;
 
-use base qw(Email::RFC2047::Encoder::WordEncoder);
+use base qw(Email::MIME::RFC2047::Encoder::WordEncoder);
 
 sub flush {
     my $self = shift;

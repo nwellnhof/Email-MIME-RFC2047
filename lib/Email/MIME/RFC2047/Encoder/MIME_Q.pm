@@ -1,8 +1,8 @@
-package Email::RFC2047::Encoder::MIME_Q;
+package Email::MIME::RFC2047::Encoder::MIME_Q;
 
 use strict;
 
-use base qw(Email::RFC2047::Encoder::WordEncoder);
+use base qw(Email::MIME::RFC2047::Encoder::WordEncoder);
 
 use Encode ();
 

@@ -1,4 +1,4 @@
-package Email::RFC2047;
+package Email::MIME::RFC2047;
 
 1;
 
@@ -6,13 +6,13 @@ __END__
 
 =head1 NAME
 
-Email::RFC2047 - Correct handling of non-ASCII MIME headers
+Email::MIME::RFC2047 - Correct handling of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
- use Email::RFC2047::Encoder;
+ use Email::MIME::RFC2047::Encoder;
  
- my $encoder = Email::RFC2047::Encoder->new(
+ my $encoder = Email::MIME::RFC2047::Encoder->new(
      encoding => 'utf-8',
      method   => 'Q',
  );
@@ -20,9 +20,9 @@ Email::RFC2047 - Correct handling of non-ASCII MIME headers
  my $encoded_text   = $encoder->encode_text($string);
  my $encoded_phrase = $encoder->encode_phrase($string);
  
- use Email::RFC2047::Decoder;
+ use Email::MIME::RFC2047::Decoder;
  
- my $decoder = Email::RFC2047::Decoder->new();
+ my $decoder = Email::MIME::RFC2047::Decoder->new();
  
  my $string = $decoder->decode_text($encoded_text);
  my $string = $decoder->decode_phrase($encoded_phrase);
@@ -44,9 +44,9 @@ for 'encoded-words':
 (3) As a replacement for a 'word' entity within a 'phrase', for example,
 one that precedes an address in a From, To, or Cc header
 
-See L<Email::RFC2047::Encoder> for encoding
+See L<Email::MIME::RFC2047::Encoder> for encoding
 
-See L<Email::RFC2047::Decoder> for decoding
+See L<Email::MIME::RFC2047::Decoder> for decoding
 
 =head1 AUTHOR
 
