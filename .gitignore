@@ -1,2 +1,4 @@
+.*.swp
+.build/
 Email-RFC2047-*/
 Email-RFC2047-*.tar.gz
