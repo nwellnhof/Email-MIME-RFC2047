@@ -24,8 +24,8 @@ Email::RFC2047 - Correct handling of non-ASCII MIME headers
  
  my $decoder = Email::RFC2047::Decoder->new();
  
- my $string = $encoder->decode_text($encoded_text);
- my $string = $encoder->decode_phrase($encoded_phrase);
+ my $string = $decoder->decode_text($encoded_text);
+ my $string = $decoder->decode_phrase($encoded_phrase);
 
 =head1 DESCRIPTION
 
