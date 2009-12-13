@@ -10,19 +10,19 @@ sub new {
     my $package = shift;
     my $options = ref($_[0]) ? $_[0] : { @_ };
 
-    my ($encoding, $type) = ($options->{encoding}, $options->{type});
+    my ($encoding, $method) = ($options->{encoding}, $options->{method});
 
     if(!defined($encoding)) {
         $encoding = 'utf-8';
-        $type = 'Q' if !defined($type);
+        $method = 'Q' if !defined($method);
     }
     else {
-        $type = 'B' if !defined($type);
+        $method = 'B' if !defined($method);
     }
 
     my $self = {
         encoding => $encoding,
-        type     => uc($type),
+        method   => uc($method),
     };
 
     return bless($self, $package);
@@ -48,7 +48,7 @@ sub _encode {
     my $quoted_encoder = Email::RFC2047::Encoder::Quoted->new(
         result => \$result,
     ) if $mode eq 'phrase';
-    my $mime_package = "Email::RFC2047::Encoder::MIME_$self->{type}";
+    my $mime_package = "Email::RFC2047::Encoder::MIME_$self->{method}";
     my $mime_encoder = $mime_package->new(
         result => \$result,
         encoding => $self->{encoding},
@@ -105,7 +105,7 @@ __END__
 
 =head1 NAME
 
-Email::RFC2047::Encoder - Encoding of non-ascii MIME email message headers
+Email::RFC2047::Encoder - Encoding of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
@@ -113,7 +113,7 @@ Email::RFC2047::Encoder - Encoding of non-ascii MIME email message headers
  
  my $encoder = Email::RFC2047::Encoder->new(
      encoding => 'utf-8',
-     type     => 'Q',
+     method   => 'Q',
  );
  
  my $encoded_text   = $encoder->encode_text($string);
@@ -121,7 +121,7 @@ Email::RFC2047::Encoder - Encoding of non-ascii MIME email message headers
 
 =head1 DESCRIPTION
 
-This module encodes non-ascii text for MIME email message headers according to
+This module encodes non-ASCII text for MIME email message headers according to
 RFC 2047.
 
 =head1 CONSTRUCTOR

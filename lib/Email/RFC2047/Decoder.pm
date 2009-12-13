@@ -36,9 +36,9 @@ sub decode_text {
                 \z
             /x
         ) {
-            my ($encoding, $type, $content) = ($1, uc($2), $3);
+            my ($encoding, $method, $content) = ($1, uc($2), $3);
 
-            if($type eq 'Q') {
+            if($method eq 'Q') {
                 $content =~ tr/_/ /;
                 $content =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
             }
@@ -92,7 +92,7 @@ __END__
 
 =head1 NAME
 
-Email::RFC2047::Decoder - Decoding of non-ascii MIME email message headers
+Email::RFC2047::Decoder - Decoding of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
@@ -105,7 +105,7 @@ Email::RFC2047::Decoder - Decoding of non-ascii MIME email message headers
 
 =head1 DESCRIPTION
 
-This module decodes parts of MIME email message headers containing non-ascii
+This module decodes parts of MIME email message headers containing non-ASCII
 text according to RFC 2047.
 
 =head1 CONSTRUCTOR

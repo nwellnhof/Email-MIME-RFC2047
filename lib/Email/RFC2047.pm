@@ -14,7 +14,7 @@ Email::RFC2047 - Correct handling of non-ASCII MIME headers
  
  my $encoder = Email::RFC2047::Encoder->new(
      encoding => 'utf-8',
-     type     => 'Q',
+     method   => 'Q',
  );
  
  my $encoded_text   = $encoder->encode_text($string);
@@ -38,11 +38,14 @@ encoded headers are used. Section 5. of the RFC defines three use cases
 for 'encoded-words':
 
 (1) As a replacement of 'text' tokens, for example in a Subject header
+
 (2) In comments, this case isn't handled by this module
+
 (3) As a replacement for a 'word' entity within a 'phrase', for example,
 one that precedes an address in a From, To, or Cc header
 
 See L<Email::RFC2047::Encoder> for encoding
+
 See L<Email::RFC2047::Decoder> for decoding
 
 =head1 AUTHOR
