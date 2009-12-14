@@ -3,6 +3,7 @@ package Email::MIME::RFC2047::Decoder;
 use strict;
 
 use Encode ();
+use MIME::Base64 ();
 
 sub new {
     my $package = shift;
