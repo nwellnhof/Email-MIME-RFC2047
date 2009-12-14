@@ -28,23 +28,32 @@ sub decode_text {
             length($word) <= 75 &&
             $word =~ /
                 ^
-                =
-                \? ( [\w-]+ )
-                \? ( [BbQq] )
-                \? ( [^?\x00-\x20\x7f-\x{ffff}]+ )
-                \?
-                =
+                = \? ( [\w-]+ ) \?
+                (?:
+                    [Bb] \?
+                    (
+                        (?:
+                            [A-Za-z0-9+\/]{2}
+                            (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
+                        )+
+                    ) |
+                    [Qq] \?
+                    ( [^?\x00-\x20\x7f-\x{ffff}]+ )
+                )
+                \? =
                 \z
             /x
         ) {
-            my ($encoding, $method, $content) = ($1, uc($2), $3);
+            my ($encoding, $b_content, $q_content) = ($1, $2, $3);
+            my $content;
 
-            if($method eq 'Q') {
+            if(defined($q_content)) {
+                $content = $q_content;
                 $content =~ tr/_/ /;
                 $content =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
             }
             else {
-                $content = MIME::Base64::decode_base64($content);
+                $content = MIME::Base64::decode_base64($b_content);
             }
 
             $string = Encode::decode($encoding, $content);
