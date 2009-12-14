@@ -5,6 +5,35 @@ use strict;
 use Encode ();
 use MIME::Base64 ();
 
+my $encoded_word_re = qr/
+    ( ^ | \s+ )
+    = \? ( [\w-]+ ) \?
+    (?:
+        [Bb] \?
+        (
+            (?:
+                [A-Za-z0-9+\/]{2}
+                (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
+            )+
+        ) |
+        [Qq] \?
+        ( [^?\x00-\x20\x7f-\x{ffff}]+ )
+    )
+    \? =
+    (?= \z | \s+ )
+/x;
+
+my $quoted_string_re = qr/
+    "
+    (
+        (?:
+            [^"\\] |
+            \\ .
+        )*
+    )
+    "
+/sx;
+
 sub new {
     my $package = shift;
 
@@ -16,35 +45,40 @@ sub new {
 sub decode_text {
     my ($self, $encoded) = @_;
 
+    return $self->_decode('text', $encoded);
+}
+
+sub decode_phrase {
+    my ($self, $encoded) = @_;
+
+    return $self->_decode('phrase', $encoded);
+}
+
+sub _decode {
+    my ($self, $mode, $encoded) = @_;
+
     my $result = '';
+    my $pos = 0;
     my $prev_enc_flag;
 
-    for my $word (split(/[ \t\r\n]+/, $encoded)) {
-        next if $word eq ''; # ignore leading white space
+    my $regex = $mode eq 'phrase' ?
+        qr/$encoded_word_re|$quoted_string_re/ :
+        $encoded_word_re;
 
-        my ($string, $enc_flag);
+    while($encoded =~ /\G(.*?)$regex/gs) {
+        $pos = pos($encoded);
+        my ($atom, $ws, $encoding, $b_content, $q_content, $qs_content) =
+            ($1, $2, $3, $4, $5, $6);
+        my $enc_flag;
 
-        if(
-            length($word) <= 75 &&
-            $word =~ /
-                ^
-                = \? ( [\w-]+ ) \?
-                (?:
-                    [Bb] \?
-                    (
-                        (?:
-                            [A-Za-z0-9+\/]{2}
-                            (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
-                        )+
-                    ) |
-                    [Qq] \?
-                    ( [^?\x00-\x20\x7f-\x{ffff}]+ )
-                )
-                \? =
-                \z
-            /x
-        ) {
-            my ($encoding, $b_content, $q_content) = ($1, $2, $3);
+        if(defined($atom)) {
+            $result .= $atom;
+        }
+
+        if(defined($encoding)) {
+            $enc_flag = 1;
+            $result .= $ws unless $result eq '' || $prev_enc_flag;
+
             my $content;
 
             if(defined($q_content)) {
@@ -56,44 +90,23 @@ sub decode_text {
                 $content = MIME::Base64::decode_base64($b_content);
             }
 
-            $string = Encode::decode($encoding, $content);
-
-            $enc_flag = 1;
+            $result .= Encode::decode($encoding, $content);
         }
         else {
-            $string = $word;
+            $qs_content =~ s/\\(.)/$1/gs;
+            $result .= $qs_content;
         }
-
-        $result .= ' ' unless
-            $result eq '' ||
-            $enc_flag && $prev_enc_flag;
-        $result .= $string;
 
         $prev_enc_flag = $enc_flag;
     }
 
+    $result .= substr($encoded, $pos);
+    
+    $result =~ s/^\s+//;
+    $result =~ s/\s+\z//;
+    $result =~ s/\s+/ /g;
+
     return $result;
-}
-
-sub decode_phrase {
-    my ($self, $encoded) = @_;
-
-    $encoded =~ s{
-        "
-        (
-            (?:
-                [^"\\] |
-                \\ .
-            )*
-        )
-        "
-    }{
-        my $content = $1;
-        $content =~ s/\\(.)/$1/gs;
-        $content;
-    }egsx;
-
-    return $self->decode_text($encoded);
 }
 
 1;

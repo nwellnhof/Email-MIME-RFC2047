@@ -2,10 +2,6 @@ package Email::MIME::RFC2047::Encoder;
 
 use strict;
 
-use Email::MIME::RFC2047::Encoder::MIME_B;
-use Email::MIME::RFC2047::Encoder::MIME_Q;
-use Email::MIME::RFC2047::Encoder::Quoted;
-
 sub new {
     my $package = shift;
     my $options = ref($_[0]) ? $_[0] : { @_ };
@@ -43,17 +39,8 @@ sub encode_phrase {
 sub _encode {
     my ($self, $mode, $string) = @_;
 
-    my $result = '';
-
-    my $quoted_encoder = Email::MIME::RFC2047::Encoder::Quoted->new(
-        result => \$result,
-    ) if $mode eq 'phrase';
-    my $mime_package = "Email::MIME::RFC2047::Encoder::MIME_$self->{method}";
-    my $mime_encoder = $mime_package->new(
-        result => \$result,
-        encoding => $self->{encoding},
-    );
-    my $word_encoder;
+    my ($result, $buffer) = ('', '');
+    my $buffer_type;
 
     for my $word (split(/[ \t\r\n]+/, $string)) {
         next if $word eq ''; # ignore leading white space
@@ -72,31 +59,90 @@ sub _encode {
             $word_type = 'text';
         }
         
-        if($word_type eq 'text') {
-            $word_encoder->finish() if $word_encoder;
-            $word_encoder = undef;
+        $self->_finish_buffer(\$result, $buffer_type, \$buffer)
+            if $buffer ne '' && $buffer_type ne $word_type;
+        $buffer_type = $word_type;
 
+        if($word_type eq 'text') {
             $result .= ' ' if $result ne '';
             $result .= $word;
         }
+        elsif($word_type eq 'quoted') {
+            $buffer .= ' ' if $buffer ne '';
+            $buffer .= $word;
+        }
         else {
-            my $new_word_encoder = $word_type eq 'mime' ?
-                $mime_encoder :
-                $quoted_encoder;
+            my $max_len = 75 - 7 - length($self->{encoding});
+            $max_len = 3 * ($max_len >> 2) if $self->{method} eq 'B';
 
-            if($word_encoder && $word_encoder != $new_word_encoder) {
-                $word_encoder->finish();
-                $word_encoder = undef;
+            my @chars;
+            push(@chars, ' ') if $buffer ne '';
+            push(@chars, split(//, $word));
+
+            for my $char (@chars) {
+                my $chunk;
+                
+                if($self->{method} eq 'B') {
+                    $chunk = Encode::encode($self->{encoding}, $char);
+                }
+                elsif($char =~ /[()<>@,;:\\".\[\]=?_\x80-\x{ffff}]/) {
+                    my $enc_char = Encode::encode($self->{encoding}, $char);
+                    $chunk = '';
+                    
+                    for my $byte (unpack('C*', $enc_char)) {
+                        $chunk .= sprintf('=%02x', $byte);
+                    }
+                }
+                elsif($char eq ' ') {
+                    $chunk = '_';
+                }
+                else {
+                    $chunk = $char;
+                }
+
+                if(length($buffer) + length($chunk) <= $max_len) {
+                    $buffer .= $chunk;
+                }
+                else {
+                    $self->_finish_buffer(\$result, 'mime', \$buffer);
+                    $buffer = $chunk;
+                }
             }
-
-            $word_encoder ||= $new_word_encoder;
-            $word_encoder->add_word($word);
         }
     }
 
-    $word_encoder->finish() if $word_encoder;
+    $self->_finish_buffer(\$result, $buffer_type, \$buffer)
+        if $buffer ne '';
 
     return $result;
+}
+
+sub _finish_buffer {
+    my ($self, $result, $buffer_type, $buffer) = @_;
+
+    $$result .= ' ' if $$result ne '';
+
+    if($buffer_type eq 'quoted') {
+        if($$buffer =~ /[()<>@,;:\\".\[\]]/) {
+            $$buffer =~ s/[\\"]/\\$&/g;
+            
+            $$result .= qq("$$buffer");
+        }
+        else {
+            $$result .= $$buffer;
+        }
+    }
+    elsif($buffer_type eq 'mime') {
+        if($self->{method} eq 'B') {
+            my $base64 = MIME::Base64::encode_base64($$buffer, '');
+            $$result .= "=?$self->{encoding}?B?$base64?=";
+        }
+        else {
+            $$result .= "=?$self->{encoding}?Q?$$buffer?=";
+        }
+    }
+
+    $$buffer = '';
 }
 
 1;

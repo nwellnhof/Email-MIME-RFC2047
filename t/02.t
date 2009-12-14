@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 2 + 16;
+use Test::More tests => 2 + 24;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::Decoder');
@@ -11,8 +11,17 @@ ok(defined($decoder), 'new');
 
 my @tests = (
     # illegal encoded words
-    '=?charset?Q?text text?=', '=?charset?Q?text text?=',
+    '=?iso-8859-1?Q?text text?=', '=?iso-8859-1?Q?text text?=',
+    '=?iso-8859-1?Q?text?text?=', '=?iso-8859-1?Q?text?text?=',
+    'text=?iso-8859-1?q?text?=', 'text=?iso-8859-1?q?text?=',
+    '=?iso-8859-1?q?text?=text', '=?iso-8859-1?q?text?=text',
     '=?iso-8859-1?b?----?=', '=?iso-8859-1?b?----?=',
+    '"=?US-ASCII?Q?text?="', '=?US-ASCII?Q?text?=',
+    '" =?US-ASCII?Q?text?= "', '=?US-ASCII?Q?text?=',
+    # whitespace
+    '  "  a  "  b  "  c  "  ', 'a b c',
+    ' a "b" c ', 'a b c',
+    ' a" b" c ', 'a b c',
     # examples from the RFC
     '=?US-ASCII?Q?Keith_Moore?=', 'Keith Moore',
     '=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?=', 'Keld Jørn Simonsen',
