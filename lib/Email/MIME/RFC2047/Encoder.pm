@@ -62,7 +62,7 @@ sub _encode {
 
         my $word_type;
 
-        if($word =~ /[\x80-\x{ffff}]/) {
+        if($word =~ /[\x80-\x{ffff}]|(^=\?.*\?=\z)/s) {
             $word_type = 'mime';
         }
         elsif($mode eq 'phrase') {

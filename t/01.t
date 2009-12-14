@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 4 + 11 * 2;
+use Test::More tests => 4 + 12 * 2;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::Encoder');
@@ -16,6 +16,8 @@ ok(defined($decoder), 'new');
 my @tests = (
     # white space stripping
     " \t\r\nte-xt\n\r \t", 'te-xt',
+    # encoding of encoded words
+    '=?utf-8?Q?C=c3=a4sar?=', '=?utf-8?Q?=3d=3futf-8=3fQ=3fC=3dc3=3da4sar=3f=3d?=',
     # quoted strings
     'te-xt te;xt', '"te-xt te;xt"',
     'text(text) text, text.', '"text(text) text, text."',
