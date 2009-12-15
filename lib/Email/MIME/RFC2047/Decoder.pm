@@ -78,8 +78,9 @@ sub _decode {
         $result .= $text;
 
         if(defined($encoding)) {
-            if(length($match) - length($ws) > 75) {
-                # encoded word can't be longer than 75 chars
+            # encoded words shouldn't be longer than 75 chars but
+            # let's allow up to 255 chars
+            if(length($match) - length($ws) > 255) {
                 $result .= $match;
                 $enc_flag = undef;
                 last;
@@ -108,6 +109,7 @@ sub _decode {
             };
 
             if($@) {
+                warn($@);
                 # display raw encoded word in case of errors
                 $result .= $match;
                 $enc_flag = undef;

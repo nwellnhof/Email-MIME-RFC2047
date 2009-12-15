@@ -53,6 +53,8 @@ sub _encode {
     # 'mime', 'quoted' or 'text'. The intermediate result of the conversion of
     # consecutive words of the same types is accumulated in $buffer.
     # The type of the buffer is tracked in $buffer_type.
+    # The method _finish_buffer is called to finish the encoding of the
+    # buffered content and append to the result.
     my $buffer = '';
     my $buffer_type;
 
