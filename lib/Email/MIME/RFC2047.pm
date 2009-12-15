@@ -29,12 +29,12 @@ Email::MIME::RFC2047 - Correct handling of non-ASCII MIME headers
 
 =head1 DESCRIPTION
 
-This set of modules tries to provide a usable implementation of RFC 2047
-"MIME Part Three: Message Header Extensions for Non-ASCII Text". The
+This set of modules tries to provide a correct and usable implementation of
+RFC 2047 "MIME Part Three: Message Header Extensions for Non-ASCII Text". The
 L<Encode> module also provides RFC 2047 encoding and decoding but it still
 has some bugs regarding strict standards compatibility. More importantly,
 a useful API should handle the different situations where RFC 2047
-encoded headers are used. Section 5. of the RFC defines three use cases
+encoded headers are used. Section 5 of the RFC defines three use cases
 for 'encoded-words':
 
 (1) As a replacement of 'text' tokens, for example in a Subject header
@@ -43,6 +43,10 @@ for 'encoded-words':
 
 (3) As a replacement for a 'word' entity within a 'phrase', for example,
 one that precedes an address in a From, To, or Cc header
+
+Especially, case (3) requires the handling of quoted strings as defined by
+RFC 822. So this set of modules provides separate methods for the handling of
+text and phrases.
 
 See L<Email::MIME::RFC2047::Encoder> for encoding
 

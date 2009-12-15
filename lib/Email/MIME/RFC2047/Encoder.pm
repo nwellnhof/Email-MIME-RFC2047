@@ -2,6 +2,9 @@ package Email::MIME::RFC2047::Encoder;
 
 use strict;
 
+use Encode ();
+use MIME::Base64 ();
+
 sub new {
     my $package = shift;
     my $options = ref($_[0]) ? $_[0] : { @_ };
@@ -16,8 +19,12 @@ sub new {
         $method = 'B' if !defined($method);
     }
 
+    my $encoder = Encode::find_encoding($encoding)
+        or die("encoding '$encoding' not found");
+
     my $self = {
         encoding => $encoding,
+        encoder  => $encoder,
         method   => uc($method),
     };
 
@@ -39,10 +46,17 @@ sub encode_phrase {
 sub _encode {
     my ($self, $mode, $string) = @_;
 
-    my ($result, $buffer) = ('', '');
+    my $encoder = $self->{encoder};
+    my $result = '';
+
+    # $string is split on whitespace. Each $word is categorized into
+    # 'mime', 'quoted' or 'text'. The intermediate result of the conversion of
+    # consecutive words of the same types is accumulated in $buffer.
+    # The type of the buffer is tracked in $buffer_type.
+    my $buffer = '';
     my $buffer_type;
 
-    for my $word (split(/[ \t\r\n]+/, $string)) {
+    for my $word (split(/\s+/, $string)) {
         next if $word eq ''; # ignore leading white space
 
         $word =~ s/[\x00-\x1f\x7f]//g; # better remove control chars
@@ -50,6 +64,7 @@ sub _encode {
         my $word_type;
 
         if($word =~ /[\x80-\x{ffff}]|(^=\?.*\?=\z)/s) {
+            # also encode any word that starts with '=?' and ends with '?='
             $word_type = 'mime';
         }
         elsif($mode eq 'phrase') {
@@ -83,10 +98,16 @@ sub _encode {
                 my $chunk;
                 
                 if($self->{method} eq 'B') {
-                    $chunk = Encode::encode($self->{encoding}, $char);
+                    $chunk = $encoder->encode($char);
                 }
-                elsif($char =~ /[()<>@,;:\\".\[\]=?_\x80-\x{ffff}]/) {
-                    my $enc_char = Encode::encode($self->{encoding}, $char);
+                elsif($char =~ /[()<>@,;:\\".\[\]=?_]/) {
+                    # special character
+                    $chunk = sprintf('=%02x', ord($char));
+                }
+                elsif($char =~ /[\x80-\x{ffff}]/) {
+                    # non-ASCII character
+
+                    my $enc_char = $encoder->encode($char);
                     $chunk = '';
                     
                     for my $byte (unpack('C*', $enc_char)) {
@@ -124,6 +145,7 @@ sub _finish_buffer {
 
     if($buffer_type eq 'quoted') {
         if($$buffer =~ /[()<>@,;:\\".\[\]]/) {
+            # use quoted string if buffer contains special chars
             $$buffer =~ s/[\\"]/\\$&/g;
             
             $$result .= qq("$$buffer");
@@ -133,13 +155,16 @@ sub _finish_buffer {
         }
     }
     elsif($buffer_type eq 'mime') {
+        $$result .= "=?$self->{encoding}?$self->{method}?";
+
         if($self->{method} eq 'B') {
-            my $base64 = MIME::Base64::encode_base64($$buffer, '');
-            $$result .= "=?$self->{encoding}?B?$base64?=";
+            $$result .= MIME::Base64::encode_base64($$buffer, '');
         }
         else {
-            $$result .= "=?$self->{encoding}?Q?$$buffer?=";
+            $$result .= $$buffer;
         }
+
+        $$result .= '?=';
     }
 
     $$buffer = '';
@@ -185,8 +210,8 @@ I<encoding> specifies the encoding ("character set" in the RFC) to use. This is
 passed to the L<Encode> module. See L<Encode::Supported> for supported
 encodings.
 
-I<method> specifies the encoding method (or simply "encoding" in the RFC). Must
-be either 'B' or 'Q'.
+I<method> specifies the encoding method ("encoding" in the RFC). Must be either
+'B' or 'Q'.
 
 If both I<encoding> and I<method> are omitted, encoding defaults to 'utf-8'
 and method to 'Q'. If only I<encoding> is omitted it defaults to 'utf-8'.
@@ -206,6 +231,9 @@ field, or any MIME body part field for which the field body is defined as
 This method tries to use the MIME encoding for as few characters of the
 input string as possible. So the result may consist of a mix of
 'encoded-words' and '*text'.
+
+The source string is trimmed and any whitespace is collapsed. The words in the
+result are separated by single space characters without folding of long lines.
 
 =head2 encode_phrase
 
