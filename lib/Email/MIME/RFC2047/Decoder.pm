@@ -88,9 +88,9 @@ sub _decode {
     # use shortest match on any characters we don't want to decode
     my $regex = $mode eq 'phrase' ?
         qr/([^$rfc_specials]*?)($encoded_word_phrase_re|$quoted_string_re)/ :
-        qr/(.*?)($encoded_word_text_re)/;
+        qr/(.*?)($encoded_word_text_re)/s;
 
-    while($encoded =~ /\G$regex/cgs) {
+    while($encoded =~ /\G$regex/cg) {
         my ($text, $match,
             $ws, $encoding, $b_content, $q_content,
             $qs_content) =
@@ -155,8 +155,8 @@ sub _decode {
 
     $regex = $mode eq 'phrase' ?
         qr/[^$rfc_specials]+/ :
-        qr/.+/;
-    $result .= $& if $encoded =~ /\G$regex/;
+        qr/.+/s;
+    $result .= $& if $encoded =~ /\G$regex/cg;
 
     # normalize whitespace
     $result =~ s/^\s+//;
