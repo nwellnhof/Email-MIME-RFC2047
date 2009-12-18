@@ -69,15 +69,15 @@ sub new {
 }
 
 sub decode_text {
-    my ($self, $encoded) = @_;
+    my $self = shift;
 
-    return $self->_decode('text', $encoded);
+    return $self->_decode('text', @_);
 }
 
 sub decode_phrase {
-    my ($self, $encoded) = @_;
+    my $self = shift;
 
-    return $self->_decode('phrase', $encoded);
+    return $self->_decode('phrase', @_);
 }
 
 sub _decode {
@@ -165,6 +165,8 @@ sub _decode {
 
     # remove potentially dangerous ASCII control chars
     $result =~ s/[\x00-\x1f\x7f]//g;
+
+    pos($_[2]) = pos($encoded);
 
     return $result;
 }
