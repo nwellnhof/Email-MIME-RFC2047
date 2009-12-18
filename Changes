@@ -1,5 +1,8 @@
 Revision history for Perl module Email::MIME::RFC2047
 
+0.89_02
+        - Make decode_phrase stop at RFC 822 special chars
+
 0.89_01
 	- Initial version
 

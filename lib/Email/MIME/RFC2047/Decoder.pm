@@ -5,11 +5,13 @@ use strict;
 use Encode ();
 use MIME::Base64 ();
 
+my $rfc_specials = '()<>\[\]:;\@\\,."';
+
 # Regex for encoded words including leading whitespace.
 # This also checks the validity of base64 encoded data because MIME::Base64
 # silently ignores invalid characters.
 # Captures ($ws, $encoding, $content_b, $content_q)
-my $encoded_word_re = qr/
+my $encoded_word_text_re = qr/
     ( ^ | \s+ )
     = \? ( [\w-]+ ) \?
     (?:
@@ -25,6 +27,26 @@ my $encoded_word_re = qr/
     )
     \? =
     (?= \z | \s+ )
+/x;
+
+# Same as $encoded_word_text_re but excluding RFC 822 special chars
+# Also matches before special chars
+my $encoded_word_phrase_re = qr/
+    ( ^ | \s+ )
+    = \? ( [\w-]+ ) \?
+    (?:
+        [Bb] \?
+        (
+            (?:
+                [A-Za-z0-9+\/]{2}
+                (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
+            )+
+        ) |
+        [Qq] \?
+        ( [^?\x00-\x20$rfc_specials\x7f-\x{ffff}]+ )
+    )
+    \? =
+    (?= \z | \s+ | [$rfc_specials] )
 /x;
 
 my $quoted_string_re = qr/
@@ -62,18 +84,17 @@ sub _decode {
     my ($self, $mode, $encoded) = @_;
 
     my $result = '';
-    my $pos = 0;
     my $enc_flag;
+    # use shortest match on any characters we don't want to decode
     my $regex = $mode eq 'phrase' ?
-        qr/$encoded_word_re|$quoted_string_re/ :
-        $encoded_word_re;
+        qr/([^$rfc_specials]*?)($encoded_word_phrase_re|$quoted_string_re)/ :
+        qr/(.*?)($encoded_word_text_re)/;
 
-    while($encoded =~ /\G(.*?)($regex)/gs) {
+    while($encoded =~ /\G$regex/cgs) {
         my ($text, $match,
             $ws, $encoding, $b_content, $q_content,
             $qs_content) =
             ($1, $2, $3, $4, $5, $6, $7);
-        $pos = pos($encoded);
 
         $result .= $text;
 
@@ -132,9 +153,12 @@ sub _decode {
         }
     }
 
-    $result .= substr($encoded, $pos);
+    $regex = $mode eq 'phrase' ?
+        qr/[^$rfc_specials]+/ :
+        qr/.+/;
+    $result .= $& if $encoded =~ /\G$regex/;
 
-    # normalize    
+    # normalize whitespace
     $result =~ s/^\s+//;
     $result =~ s/\s+\z//;
     $result =~ s/\s+/ /g;
@@ -184,6 +208,9 @@ Creates a new decoder object.
 Decodes any MIME header field for which the field body is defined as '*text'
 (as defined by RFC 822), for example, any Subject or Comments header field.
 
+This method processes $encoded_text starting from the current search position.
+See L<perlfunc/pos>.
+ 
 The resulting string is trimmed and any whitespace is collapsed.
 
 =head2 decode_phrase
@@ -194,7 +221,9 @@ Decodes any 'phrase' token (as defined by RFC 822) in a MIME header field,
 for example, one that precedes an address in a From, To, or Cc header.
 
 This method works like I<decode_text> but additionally unquotes any
-'quoted-strings'.
+'quoted-strings'. It also stops at any special character as defined by
+RFC 822. The current search position is set accordingly. This is helpful
+when parsing RFC 822 email addresses.
 
 =head1 AUTHOR
 
