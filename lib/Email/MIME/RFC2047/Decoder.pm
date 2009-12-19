@@ -147,11 +147,19 @@ sub _decode {
             $enc_flag = 1;
         }
         else {
-            $result .= $text;
+            # quoted string
 
-            # quoted string, unquote
+            $result .= $text;
+            
+            # make sure there is whitespace before the quoted string
+            $result .= ' ';
+
+            # unquote
             $qs_content =~ s/\\(.)/$1/gs;
             $result .= $qs_content;
+
+            # make sure there is whitespace after the quoted string
+            $result .= ' ';
 
             $enc_flag = undef;
         }
