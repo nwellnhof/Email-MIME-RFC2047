@@ -134,7 +134,7 @@ Gets or sets the mailbox list of the group.
 
 Returns the formatted string for use in a message header.
 
-$encoder is an optional Email::MIME::RFC2047::Encoder object used for
+$encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
 
 =head1 AUTHOR

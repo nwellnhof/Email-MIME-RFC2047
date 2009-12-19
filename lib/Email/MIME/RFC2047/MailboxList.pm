@@ -35,8 +35,8 @@ Email::MIME::RFC2047::MailboxList - Handling of MIME encoded mailbox lists
 =head1 DESCRIPTION
 
 This module handles RFC 2822 'mailbox-lists'. It is a subclass of
-Email::MIME::RFC2047::AddressList and works the same but only allows
-mailboxes as items.
+L<Email::MIME::RFC2047::AddressList> and works the same but only allows
+L<Email::MIME::RFC2047::Mailbox> items.
 
 =head1 AUTHOR
 

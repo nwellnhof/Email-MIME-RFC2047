@@ -62,12 +62,12 @@ for 'encoded-words':
 one that precedes an address in a From, To, or Cc header
 
 Especially, case (3) requires the handling of quoted strings as defined by
-RFC 822. So the encoding and decoding modules provides separate methods for
+RFC 822. So the encoding and decoding modules provide separate methods for
 the handling of text and phrases.
 
 Since parsing and encoding of phrases makes up the bulk of handling address
-headers like From, To or Cc, some modules to handle these headers are
-included.
+headers like From, To or Cc, additional modules to handle these headers are
+also provided.
 
 See L<Email::MIME::RFC2047::Encoder> for encoding
 
@@ -79,6 +79,14 @@ See L<Email::MIME::RFC2047::MailboxList> for handling of From headers
 
 See L<Email::MIME::RFC2047::AddressList> for handling of Reply-To, To, Cc
 and Bcc headers
+
+See L<Email::MIME::RFC2047::Group> for handling groups of mailboxes
+
+=head1 TODO
+
+Parsing of address headers is at an alpha stage at the moment.
+
+Comments as defined by RFC 822 are not supported.
 
 =head1 AUTHOR
 

@@ -227,8 +227,8 @@ for example, one that precedes an address in a From, To, or Cc header.
 This method works like I<decode_text> but additionally unquotes any
 'quoted-strings'. It also stops at any special character as defined by
 RFC 822. If $encoded_phrase is a reference to a scalar the current search
-position is set accordingly. This is helpful when parsing RFC 822 email
-addresses.
+position is set accordingly. This is helpful when parsing RFC 822 address
+headers.
 
 =head1 AUTHOR
 

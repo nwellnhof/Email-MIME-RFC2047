@@ -75,8 +75,8 @@ Email::MIME::RFC2047::Address - Handling of MIME encoded addresses
 
 =head1 DESCRIPTION
 
-This is the superclass for Email::MIME::RFC2047::Mailbox and
-Email::MIME::RFC2047::Group.
+This is the superclass for L<Email::MIME::RFC2047::Mailbox> and
+L<Email::MIME::RFC2047::Group>.
 
 =head1 CLASS METHODS
 
@@ -84,8 +84,8 @@ Email::MIME::RFC2047::Group.
 
  my $address = Email::MIME::RFC2047::Address->parse($string, [$decoder])
 
-Parse a RFC 2822 'address'. Returns either a Email::MIME::RFC2047::Mailbox
-or a Email::MIME::RFC2047::Group object.
+Parses a RFC 2822 'address'. Returns either a L<Email::MIME::RFC2047::Mailbox>
+or a L<Email::MIME::RFC2047::Group> object.
 
 =head1 AUTHOR
 

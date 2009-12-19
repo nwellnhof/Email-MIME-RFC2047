@@ -91,7 +91,7 @@ This module handles RFC 2822 'address-lists'.
  );
 
 Parse a RFC 2822 'address-list'. Returns a Email::MIME::RFC2047::AddressList
-object.
+object containing L<Email::MIME::RFC2047::Address> items.
 
 =head1 CONSTRUCTOR
 
@@ -122,7 +122,7 @@ Appends items to the address list.
 
 Returns the formatted address list string for use in a message header.
 
-$encoder is an optional Email::MIME::RFC2047::Encoder object used for
+$encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
 
 =head1 AUTHOR
