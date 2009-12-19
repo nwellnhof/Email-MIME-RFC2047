@@ -6,6 +6,7 @@ use Encode ();
 use MIME::Base64 ();
 
 my $rfc_specials = '()<>\[\]:;\@\\,."';
+my $rfc_specials_no_quote = '()<>\[\]:;\@\\,.';
 
 # Regex for encoded words.
 # This also checks the validity of base64 encoded data because MIME::Base64
@@ -32,7 +33,7 @@ my $encoded_word_text_re = qr/
 # Same as $encoded_word_text_re but excluding RFC 822 special chars
 # Also matches after and before special chars
 my $encoded_word_phrase_re = qr/
-    (?: ^ | (?<= [\s$rfc_specials] ) )
+    (?: ^ | (?<= [\s$rfc_specials_no_quote] ) )
     = \? ( [\w-]+ ) \?
     (?:
         [Bb] \?
@@ -46,7 +47,7 @@ my $encoded_word_phrase_re = qr/
         ( [^?\x00-\x20$rfc_specials\x7f-\x{ffff}]+ )
     )
     \? =
-    (?= \z | [\s$rfc_specials] )
+    (?= \z | [\s$rfc_specials_no_quote] )
 /x;
 
 my $quoted_string_re = qr/
