@@ -1,6 +1,9 @@
-Revision history for Perl module Email::MIME::RFC2047
+Revision history for Perl extension Email::MIME::RFC2047
 
 0.89_02
+        - Add modules to parse and format address headers
+        - Make it possible to pass references to decoding methods,
+          use and update m//g search position in this case
         - Make decode_phrase stop at RFC 822 special chars
 
 0.89_01

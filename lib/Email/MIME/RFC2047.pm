@@ -10,22 +10,39 @@ Email::MIME::RFC2047 - Correct handling of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
+ use Email::MIME;
+
+ # create headers with non-ASCII chars
+
  use Email::MIME::RFC2047::Encoder;
- 
+ use Email::MIME::RFC2047::Mailbox;
+  
+ my $email = Email::MIME->create();
  my $encoder = Email::MIME::RFC2047::Encoder->new(
      encoding => 'utf-8',
      method   => 'Q',
  );
  
- my $encoded_text   = $encoder->encode_text($string);
- my $encoded_phrase = $encoder->encode_phrase($string);
+ $email->header_set(Subject => $encoder->encode_text($non_ascii_subject));
+
+ my $to_address = Email::MIME::RFC2047::Mailbox->new(
+    name    => $non_ascii_name,
+    address => $email_address,
+ );
+ $email->header_set(To => $to_address->format($encoder));
  
+ # parse headers with non-ASCII chars
+
  use Email::MIME::RFC2047::Decoder;
- 
+
+ my $email = Email::MIME->new($message);
  my $decoder = Email::MIME::RFC2047::Decoder->new();
  
- my $string = $decoder->decode_text($encoded_text);
- my $string = $decoder->decode_phrase($encoded_phrase);
+ my $subject = $decoder->decode_text($email->header('Subject'));
+
+ my $to_address = Email::MIME::RFC2047::AddressList->parse(
+    $email->header('To')
+ );
 
 =head1 DESCRIPTION
 
@@ -45,12 +62,23 @@ for 'encoded-words':
 one that precedes an address in a From, To, or Cc header
 
 Especially, case (3) requires the handling of quoted strings as defined by
-RFC 822. So this set of modules provides separate methods for the handling of
-text and phrases.
+RFC 822. So the encoding and decoding modules provides separate methods for
+the handling of text and phrases.
+
+Since parsing and encoding of phrases makes up the bulk of handling address
+headers like From, To or Cc, some modules to handle these headers are
+included.
 
 See L<Email::MIME::RFC2047::Encoder> for encoding
 
 See L<Email::MIME::RFC2047::Decoder> for decoding
+
+See L<Email::MIME::RFC2047::Mailbox> for handling of Sender headers
+
+See L<Email::MIME::RFC2047::MailboxList> for handling of From headers
+
+See L<Email::MIME::RFC2047::AddressList> for handling of Reply-To, To, Cc
+and Bcc headers
 
 =head1 AUTHOR
 
