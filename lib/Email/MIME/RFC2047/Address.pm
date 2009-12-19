@@ -27,11 +27,14 @@ sub parse {
             my $addr_spec = $1;
 
             $address = Email::MIME::RFC2047::Mailbox->new(
-                name    => $name,
                 address => $addr_spec,
             );
+
+            $address->name($name) if $name ne '';
         }
         elsif($$string_ref =~ /\G:/cg) {
+            die("empty group name\n") if $name eq '';
+
             my $mailbox_list;
 
             if($$string_ref =~ /\G\s*;\s*/cg) {
