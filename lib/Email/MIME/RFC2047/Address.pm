@@ -32,10 +32,18 @@ sub parse {
             );
         }
         elsif($$string_ref =~ /\G:/cg) {
-            my $mailbox_list = Email::MIME::RFC2047::MailboxList->parse(
-                $string_ref, $decoder
-            );
-            $$string_ref =~ /\G;\s*/cg or die("can't parse group");
+            my $mailbox_list;
+
+            if($$string_ref =~ /\G\s*;\s*/cg) {
+                $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
+            }
+            else {
+                $mailbox_list = Email::MIME::RFC2047::MailboxList->parse(
+                    $string_ref, $decoder
+                );
+
+                $$string_ref =~ /\G;\s*/cg or die("can't parse group");
+            }
 
             $address = Email::MIME::RFC2047::Group->new(
                 name         => $name,

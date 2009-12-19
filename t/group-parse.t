@@ -1,9 +1,8 @@
 use utf8;
 
-use Test::More tests => 2 + 1 * 2;
+use Test::More tests => 1 + 2;
 
 BEGIN {
-    use_ok('Email::MIME::RFC2047::Group');
     use_ok('Email::MIME::RFC2047::Address');
 };
 
@@ -16,13 +15,15 @@ my @tests = (
             { name => 'André Pirard', address => 'PIRARD@vm1.ulg.ac.be' },
         ],
     },
+    'undisclosed-recipients:;',
+    {
+        name => 'undisclosed-recipients',
+        mailbox_list => [],
+    },
 );
 
 for(my $i=0; $i<@tests; $i+=2) {
     my ($string, $expect) = ($tests[$i], $tests[$i+1]);
-
-    my $group = Email::MIME::RFC2047::Group->parse($string);
-    is_deeply($group, $expect, "parse group $string");
 
     my $address = Email::MIME::RFC2047::Address->parse($string);
     is_deeply($address, $expect, "parse address $string");
