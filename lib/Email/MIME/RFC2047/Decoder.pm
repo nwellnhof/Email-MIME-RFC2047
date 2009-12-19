@@ -7,12 +7,12 @@ use MIME::Base64 ();
 
 my $rfc_specials = '()<>\[\]:;\@\\,."';
 
-# Regex for encoded words including leading whitespace.
+# Regex for encoded words.
 # This also checks the validity of base64 encoded data because MIME::Base64
 # silently ignores invalid characters.
-# Captures ($ws, $encoding, $content_b, $content_q)
+# Captures ($encoding, $content_b, $content_q)
 my $encoded_word_text_re = qr/
-    ( ^ | \s+ )
+    (?: ^ | (?<= \s ) )
     = \? ( [\w-]+ ) \?
     (?:
         [Bb] \?
@@ -26,13 +26,13 @@ my $encoded_word_text_re = qr/
         ( [^?\x00-\x20\x7f-\x{ffff}]+ )
     )
     \? =
-    (?= \z | \s+ )
+    (?= \z | \s )
 /x;
 
 # Same as $encoded_word_text_re but excluding RFC 822 special chars
-# Also matches before special chars
+# Also matches after and before special chars
 my $encoded_word_phrase_re = qr/
-    ( ^ | \s+ )
+    (?: ^ | (?<= [\s$rfc_specials] ) )
     = \? ( [\w-]+ ) \?
     (?:
         [Bb] \?
@@ -46,7 +46,7 @@ my $encoded_word_phrase_re = qr/
         ( [^?\x00-\x20$rfc_specials\x7f-\x{ffff}]+ )
     )
     \? =
-    (?= \z | \s+ | [$rfc_specials] )
+    (?= \z | [\s$rfc_specials] )
 /x;
 
 my $quoted_string_re = qr/
@@ -93,16 +93,15 @@ sub _decode {
 
     while($$encoded_ref =~ /\G$regex/cg) {
         my ($text, $match,
-            $ws, $encoding, $b_content, $q_content,
+            $encoding, $b_content, $q_content,
             $qs_content) =
             ($1, $2, $3, $4, $5, $6, $7);
-
-        $result .= $text;
 
         if(defined($encoding)) {
             # encoded words shouldn't be longer than 75 chars but
             # let's allow up to 255 chars
-            if(length($match) - length($ws) > 255) {
+            if(length($match) > 255) {
+                $result .= $text;
                 $result .= $match;
                 $enc_flag = undef;
                 last;
@@ -133,19 +132,22 @@ sub _decode {
             if($@) {
                 warn($@);
                 # display raw encoded word in case of errors
+                $result .= $text;
                 $result .= $match;
                 $enc_flag = undef;
                 last;
             }
 
             # ignore whitespace between encoded words
-            $result .= $ws unless $enc_flag && $text eq '';
+            $result .= $text if !$enc_flag || $text =~ /\S/;
 
             $result .= $chunk;
 
             $enc_flag = 1;
         }
         else {
+            $result .= $text;
+
             # quoted string, unquote
             $qs_content =~ s/\\(.)/$1/gs;
             $result .= $qs_content;
