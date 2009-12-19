@@ -47,27 +47,13 @@ for(my $i=0; $i<@tests; $i+=3) {
     $normalized =~ s/[ \t\r\n]+\z//;
 
     my $text = $encoder->encode_text($string);
-    ok(
-        $text eq $expect_text,
-        "encode_text $string, got $text, expected $expect_text"
-    );
-
+    is($text, $expect_text, "encode_text $string");
     $decoded = $decoder->decode_text($text);
-    ok(
-        $decoded eq $normalized,
-        "decode_text $text, got $decoded, expected $normalized"
-    );
+    is($decoded, $normalized, "decode_text $text");
 
     my $phrase = $encoder->encode_phrase($string);
-    ok(
-        $phrase eq $expect_phrase,
-        "encode_phrase $string, got $phrase, expected $expect_phrase"
-    );
-
+    is($phrase, $expect_phrase, "encode_phrase $string");
     $decoded = $decoder->decode_phrase($phrase);
-    ok(
-        $decoded eq $normalized,
-        "decode_phrase $phrase, got $decoded, expected $normalized"
-    );
+    is($decoded, $normalized, "decode_phrase $phrase");
 }
 

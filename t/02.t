@@ -49,9 +49,6 @@ for(my $i=0; $i<@tests; $i+=2) {
     my ($encoded, $expect) = ($tests[$i], $tests[$i+1]);
 
     my $decoded = $decoder->decode_phrase($encoded);
-    ok(
-        $decoded eq $expect,
-        "decode_phrase $encoded, got $decoded, expected $expect"
-    );
+    is($decoded, $expect, "decode_phrase $encoded");
 }
 
