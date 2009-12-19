@@ -7,7 +7,7 @@ use Email::MIME::RFC2047::Decoder;
 use Email::MIME::RFC2047::Encoder;
 
 my $domain_part = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
-my $addr_spec = qr/[\w.-]+\@$domain_part(?:\.$domain_part)+/;
+my $addr_spec = qr/[\w+.-]+\@$domain_part(?:\.$domain_part)+/;
 
 sub new {
     my $class = shift;
