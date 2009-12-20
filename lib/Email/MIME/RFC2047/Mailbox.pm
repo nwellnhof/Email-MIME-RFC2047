@@ -41,14 +41,14 @@ sub parse {
         my $name = $decoder->decode_phrase($string_ref);
 
         $$string_ref =~ /\G<\s*($addr_spec_re)\s*>\s*/cg
-            or die("can't parse mailbox");
+            or return $class->_parse_error($string_ref, 'mailbox');
         my $addr_spec = $1;
 
         $mailbox = $class->new(name => $name, address => $addr_spec);
     }
 
     if(!ref($string) && pos($string) < length($string)) {
-        die("invalid characters after mailbox\n");
+        return $class->_parse_error($string_ref);
     }
 
     return $mailbox;

@@ -1,6 +1,7 @@
 package Email::MIME::RFC2047::Address;
 
 use strict;
+use base qw(Email::MIME::RFC2047::Parser);
 
 use Email::MIME::RFC2047::Decoder;
 use Email::MIME::RFC2047::Group;
@@ -33,7 +34,8 @@ sub parse {
             $address->name($name) if $name ne '';
         }
         elsif($$string_ref =~ /\G:/cg) {
-            die("empty group name\n") if $name eq '';
+            return $class->_parse_error($string_ref, 'group name')
+                if $name eq '';
 
             my $mailbox_list;
 
@@ -45,7 +47,8 @@ sub parse {
                     $string_ref, $decoder
                 );
 
-                $$string_ref =~ /\G;\s*/cg or die("can't parse group");
+                $$string_ref =~ /\G;\s*/cg
+                    or return $class->_parse_error($string_ref, 'group');
             }
 
             $address = Email::MIME::RFC2047::Group->new(
@@ -54,12 +57,12 @@ sub parse {
             );
         }
         else {
-            die("can't parse address");
+            return $class->_parse_error($string_ref, 'address');
         }
     }
 
     if(!ref($string) && pos($string) < length($string)) {
-        die("invalid characters after address\n");
+        return $class->_parse_error($string_ref);
     }
 
     return $address;

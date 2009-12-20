@@ -1,6 +1,7 @@
 package Email::MIME::RFC2047::AddressList;
 
 use strict;
+use base qw(Email::MIME::RFC2047::Parser);
 
 use Email::MIME::RFC2047::Decoder;
 use Email::MIME::RFC2047::Address;
@@ -26,7 +27,7 @@ sub parse {
     } while($$string_ref =~ /\G,/cg);
     
     if(!ref($string) && pos($string) < length($string)) {
-        die("invalid characters after address list\n");
+        return $class->_parse_error($string_ref);
     }
 
     return $class->new(@addresses);

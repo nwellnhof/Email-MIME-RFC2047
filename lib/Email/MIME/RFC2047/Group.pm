@@ -27,10 +27,13 @@ sub _parse {
     my $string_ref = ref($string) ? $string : \$string;
 
     $decoder ||= Email::MIME::RFC2047::Decoder->new();
-    my $name = $decoder->decode_phrase($string_ref);
-    die("empty group name") if $name eq '';
 
-    $$string_ref =~ /\G:/cg or die("can't parse group");
+    my $name = $decoder->decode_phrase($string_ref);
+    return $class->_parse_error($string_ref, 'group name')
+        if $name eq '';
+
+    $$string_ref =~ /\G:/cg
+        or return $class->_parse_error($string_ref, 'group');
 
     my $mailbox_list;
     
@@ -42,7 +45,8 @@ sub _parse {
             $string_ref, $decoder
         );
 
-        $$string_ref =~ /\G;\s*/cg or die("can't parse group");
+        $$string_ref =~ /\G;\s*/cg
+            or return $class->_parse_error($string_ref, 'group');
     }
 
     my $group = $class->new(
@@ -51,7 +55,7 @@ sub _parse {
     );
 
     if(!ref($string) && pos($string) < length($string)) {
-        die("invalid characters after group\n");
+        return $class->_parse_error($string_ref);
     }
 
     return $group;
