@@ -7,8 +7,8 @@ use Email::MIME::RFC2047::Group;
 use Email::MIME::RFC2047::Mailbox;
 use Email::MIME::RFC2047::MailboxList;
 
-my $domain_part = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
-my $addr_spec = qr/[\w+.-]+\@$domain_part(?:\.$domain_part)+/;
+my $domain_part_re = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
+my $addr_spec_re = qr/[\w+.-]+\@$domain_part_re(?:\.$domain_part_re)+/;
 
 sub parse {
     my ($class, $string, $decoder) = @_;
@@ -16,14 +16,14 @@ sub parse {
 
     my $address;
 
-    if($$string_ref =~ /\G\s*($addr_spec)\s*/cg) {
+    if($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
         $address = Email::MIME::RFC2047::Mailbox->new($1);
     }
     else {
         $decoder ||= Email::MIME::RFC2047::Decoder->new();
         my $name = $decoder->decode_phrase($string_ref);
 
-        if($$string_ref =~ /\G<\s*($addr_spec)\s*>\s*/cg) {
+        if($$string_ref =~ /\G<\s*($addr_spec_re)\s*>\s*/cg) {
             my $addr_spec = $1;
 
             $address = Email::MIME::RFC2047::Mailbox->new(

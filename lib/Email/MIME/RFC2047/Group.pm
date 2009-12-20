@@ -28,6 +28,7 @@ sub _parse {
 
     $decoder ||= Email::MIME::RFC2047::Decoder->new();
     my $name = $decoder->decode_phrase($string_ref);
+    die("empty group name") if $name eq '';
 
     $$string_ref =~ /\G:/cg or die("can't parse group");
 
@@ -78,11 +79,17 @@ sub format {
     my ($self, $encoder) = @_;
     $encoder ||= Email::MIME::RFC2047::Encoder->new();
 
-    return
-        $encoder->encode_phrase($self->{name}) .
-        ': ' .
-        $self->{mailbox_list}->format($encoder) .
-        ';';
+    my $name = $self->{name};
+    die("empty group name") if !defined($name) || $name eq '';
+
+    my $result = $encoder->encode_phrase($name) . ': ';
+
+    my $mailbox_list = $self->{mailbox_list};
+    $result .= $mailbox_list->format($encoder) if $mailbox_list;
+
+    $result .= ';';
+
+    return $result;
 }
 
 1;

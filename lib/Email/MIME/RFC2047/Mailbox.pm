@@ -6,8 +6,8 @@ use base qw(Email::MIME::RFC2047::Address);
 use Email::MIME::RFC2047::Decoder;
 use Email::MIME::RFC2047::Encoder;
 
-my $domain_part = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
-my $addr_spec = qr/[\w+.-]+\@$domain_part(?:\.$domain_part)+/;
+my $domain_part_re = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
+my $addr_spec_re = qr/[\w+.-]+\@$domain_part_re(?:\.$domain_part_re)+/;
 
 sub new {
     my $class = shift;
@@ -33,14 +33,14 @@ sub parse {
 
     my $mailbox;
 
-    if($$string_ref =~ /\G\s*($addr_spec)\s*/cg) {
+    if($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
         $mailbox = $class->new($1);
     }
     else {
         $decoder ||= Email::MIME::RFC2047::Decoder->new();
         my $name = $decoder->decode_phrase($string_ref);
 
-        $$string_ref =~ /\G<\s*($addr_spec)\s*>\s*/cg
+        $$string_ref =~ /\G<\s*($addr_spec_re)\s*>\s*/cg
             or die("can't parse mailbox");
         my $addr_spec = $1;
 
@@ -77,16 +77,19 @@ sub format {
 
     my $name = $self->{name};
     my $address = $self->{address};
+    defined($address) && $address =~ /^$addr_spec_re\z/
+        or die ("invalid email address");
+
     my $result;
 
-    if(defined($name)) {
+    if(!defined($name) || $name eq '') {
+        $result = $address;
+    }
+    else {
         $encoder ||= Email::MIME::RFC2047::Encoder->new();
         my $encoded_name = $encoder->encode_phrase($name);
 
         $result = "$encoded_name <$address>";
-    }
-    else {
-        $result = $address;
     }
 
     return $result;

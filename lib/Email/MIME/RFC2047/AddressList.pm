@@ -54,6 +54,7 @@ sub push {
 
 sub format {
     my ($self, $encoder) = @_;
+    $encoder ||= Email::MIME::RFC2047::Encoder->new();
 
     return join(', ', map { $_->format($encoder) } @$self);
 }
