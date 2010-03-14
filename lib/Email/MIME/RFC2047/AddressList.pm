@@ -51,6 +51,8 @@ sub push {
     my $self = shift;
 
     push(@$self, @_);
+
+    return;
 }
 
 sub format {

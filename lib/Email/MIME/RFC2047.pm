@@ -1,5 +1,7 @@
 package Email::MIME::RFC2047;
 
+use strict;
+
 1;
 
 __END__
