@@ -105,7 +105,7 @@ sub _decode {
                 $result .= $text;
                 $result .= $match;
                 $enc_flag = undef;
-                last;
+                next;
             }
 
             my $content;
@@ -136,7 +136,7 @@ sub _decode {
                 $result .= $text;
                 $result .= $match;
                 $enc_flag = undef;
-                last;
+                next;
             }
 
             # ignore whitespace between encoded words
