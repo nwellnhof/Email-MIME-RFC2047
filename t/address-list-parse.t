@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 1 + 3;
+use Test::More tests => 1 + 4;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::AddressList');
@@ -30,6 +30,10 @@ my @tests = (
     [
         { address => 'boss@nil.test' },
         { name => 'Giant; "Big" Box', address => 'sysservices@example.net' },
+    ],
+    "<o'reilly\@example.com>",
+    [
+        { address => "o'reilly\@example.com" },
     ],
 );
 

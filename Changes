@@ -1,5 +1,10 @@
 Revision history for Perl extension Email::MIME::RFC2047
 
+0.91
+        - Allow some more characters in local parts
+          Thanks to Joel Stevenson for the report
+        - Continue decoding in case of some errors
+
 0.90
         - Misc bug fixes and cleanups
         - Documentation fixes

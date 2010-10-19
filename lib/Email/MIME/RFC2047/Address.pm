@@ -9,7 +9,11 @@ use Email::MIME::RFC2047::Mailbox;
 use Email::MIME::RFC2047::MailboxList;
 
 my $domain_part_re = qr/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/;
-my $addr_spec_re = qr/[\w+.-]+\@$domain_part_re(?:\.$domain_part_re)+/;
+my $addr_spec_re   = qr{
+    [\w&'*+.\/=?^{}~-]+
+    \@
+    $domain_part_re (?: \. $domain_part_re)+
+}x;
 
 sub parse {
     my ($class, $string, $decoder) = @_;
