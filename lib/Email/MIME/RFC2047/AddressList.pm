@@ -1,6 +1,8 @@
 package Email::MIME::RFC2047::AddressList;
-
 use strict;
+
+# ABSTRACT: Handling of MIME encoded address lists
+
 use base qw(Email::MIME::RFC2047::Parser);
 
 use Email::MIME::RFC2047::Decoder;
@@ -66,10 +68,6 @@ sub format {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::AddressList - Handling of MIME encoded address lists
-
 =head1 SYNOPSIS
 
  use Email::MIME::RFC2047::AddressList;
@@ -128,18 +126,6 @@ Returns the formatted address list string for use in a message header.
 
 $encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

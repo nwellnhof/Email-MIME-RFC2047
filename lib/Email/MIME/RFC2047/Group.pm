@@ -1,6 +1,8 @@
 package Email::MIME::RFC2047::Group;
-
 use strict;
+
+# ABSTRACT: Handling of MIME encoded mailbox groups
+
 use base qw(Email::MIME::RFC2047::Address);
 
 use Email::MIME::RFC2047::Decoder;
@@ -100,10 +102,6 @@ sub format {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::Group - Handling of MIME encoded mailbox groups
-
 =head1 SYNOPSIS
 
  use Email::MIME::RFC2047::Group;
@@ -154,18 +152,6 @@ Returns the formatted string for use in a message header.
 
 $encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

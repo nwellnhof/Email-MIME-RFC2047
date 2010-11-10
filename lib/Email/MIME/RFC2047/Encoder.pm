@@ -1,6 +1,7 @@
 package Email::MIME::RFC2047::Encoder;
-
 use strict;
+
+# ABSTRACT: Encoding of non-ASCII MIME headers
 
 use Encode ();
 use MIME::Base64 ();
@@ -180,10 +181,6 @@ sub _finish_buffer {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::Encoder - Encoding of non-ASCII MIME headers
-
 =head1 SYNOPSIS
 
  use Email::MIME::RFC2047::Encoder;
@@ -250,18 +247,6 @@ for example, one that precedes an address in a From, To, or Cc header.
 
 This method works like I<encode_text> but additionally converts remaining
 text that contains special characters to 'quoted-strings'.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

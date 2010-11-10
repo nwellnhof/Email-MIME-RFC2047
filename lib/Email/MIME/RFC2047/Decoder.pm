@@ -1,6 +1,7 @@
 package Email::MIME::RFC2047::Decoder;
-
 use strict;
+
+# ABSTRACT: Decoding of non-ASCII MIME headers
 
 use Encode ();
 use MIME::Base64 ();
@@ -185,10 +186,6 @@ sub _decode {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::Decoder - Decoding of non-ASCII MIME headers
-
 =head1 SYNOPSIS
 
  use Email::MIME::RFC2047::Decoder;
@@ -237,18 +234,6 @@ This method works like I<decode_text> but additionally unquotes any
 RFC 822. If $encoded_phrase is a reference to a scalar the current search
 position is set accordingly. This is helpful when parsing RFC 822 address
 headers.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

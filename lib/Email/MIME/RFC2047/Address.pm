@@ -1,6 +1,8 @@
 package Email::MIME::RFC2047::Address;
-
 use strict;
+
+# ABSTRACT: Handling of MIME encoded addresses
+
 use base qw(Email::MIME::RFC2047::Parser);
 
 use Email::MIME::RFC2047::Decoder;
@@ -76,10 +78,6 @@ sub parse {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::Address - Handling of MIME encoded addresses
-
 =head1 SYNOPSIS
 
  use Email::MIME::RFC2047::Address;
@@ -104,18 +102,6 @@ L<Email::MIME::RFC2047::Group>.
 
 Parses a RFC 2822 'address'. Returns either a L<Email::MIME::RFC2047::Mailbox>
 or a L<Email::MIME::RFC2047::Group> object.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

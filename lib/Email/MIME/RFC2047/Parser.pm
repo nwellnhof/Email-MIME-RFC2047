@@ -1,6 +1,7 @@
 package Email::MIME::RFC2047::Parser;
-
 use strict;
+
+# ABSTRACT: Base class for parsers
 
 sub _parse_error {
     my ($class, $string_ref, $what) = @_;
@@ -28,25 +29,9 @@ sub _parse_error {
 
 __END__
 
-=head1 NAME
-
-Email::MIME::RFC2047::Parser - Base class for parsers
-
 =head1 DESCRIPTION
 
 This is a base class for the packages parsing address headers.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 

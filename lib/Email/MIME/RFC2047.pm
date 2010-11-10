@@ -1,14 +1,11 @@
 package Email::MIME::RFC2047;
-
 use strict;
+
+# ABSTRACT: Correct handling of non-ASCII MIME headers
 
 1;
 
 __END__
-
-=head1 NAME
-
-Email::MIME::RFC2047 - Correct handling of non-ASCII MIME headers
 
 =head1 SYNOPSIS
 
@@ -89,18 +86,6 @@ See L<Email::MIME::RFC2047::Group> for handling groups of mailboxes
 Parsing of address headers is at an alpha stage at the moment.
 
 Comments as defined by RFC 822 are not supported.
-
-=head1 AUTHOR
-
-Nick Wellnhofer <wellnhofer@aevum.de>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) Nick Wellnhofer, 2009
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.0 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
 
