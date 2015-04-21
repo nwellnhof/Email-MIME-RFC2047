@@ -25,7 +25,7 @@ my $encoded_word_text_re = qr/
             )+
         ) |
         [Qq] \?
-        ( [^?\x00-\x20\x7f-\x{ffff}]+ )
+        ( [^?\x00-\x20\x7f-\x{10ffff}]+ )
     )
     \? =
     (?= \z | \s )
@@ -45,7 +45,7 @@ my $encoded_word_phrase_re = qr/
             )+
         ) |
         [Qq] \?
-        ( [^?\x00-\x20$rfc_specials\x7f-\x{ffff}]+ )
+        ( [^?\x00-\x20$rfc_specials\x7f-\x{10ffff}]+ )
     )
     \? =
     (?= \z | [\s$rfc_specials_no_quote] )
