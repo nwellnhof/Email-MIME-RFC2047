@@ -68,7 +68,7 @@ sub _encode {
 
         my $word_type;
 
-        if($word =~ /[\x80-\x{ffff}]|(^=\?.*\?=\z)/s) {
+        if($word =~ /[\x80-\x{10ffff}]|(^=\?.*\?=\z)/s) {
             # also encode any word that starts with '=?' and ends with '?='
             $word_type = 'mime';
         }
@@ -109,7 +109,7 @@ sub _encode {
                     # special character
                     $chunk = sprintf('=%02x', ord($char));
                 }
-                elsif($char =~ /[\x80-\x{ffff}]/) {
+                elsif($char =~ /[\x80-\x{10ffff}]/) {
                     # non-ASCII character
 
                     my $enc_char = $encoder->encode($char);

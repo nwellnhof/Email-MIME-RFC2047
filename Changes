@@ -1,5 +1,8 @@
 Revision history for Perl extension Email::MIME::RFC2047
 
+0.92
+        - Unicode range extended to 0x10ffff
+
 0.91
         - Allow some more characters in local parts
           Thanks to Joel Stevenson for the report
