@@ -1,4 +1,5 @@
 package Email::MIME::RFC2047::AddressList;
+
 use strict;
 use warnings;
 

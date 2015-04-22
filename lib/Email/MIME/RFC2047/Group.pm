@@ -1,4 +1,5 @@
 package Email::MIME::RFC2047::Group;
+
 use strict;
 use warnings;
 
