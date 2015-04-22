@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 4 + 12 * 4;
+use Test::More tests => 4 + 13 * 4;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::Encoder');
@@ -32,6 +32,8 @@ my @tests = (
     # space at boundaries
     'ö ö öööööööö ö',  '=?utf-8?Q?=c3=b6_=c3=b6_=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6_?= =?utf-8?Q?=c3=b6?=', undef,
     'ö ö ö ööööööö ö', '=?utf-8?Q?=c3=b6_=c3=b6_=c3=b6_=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6=c3=b6?= =?utf-8?Q?_=c3=b6?=', undef,
+    # supplementary plane
+    "\x{1F44D}", '=?utf-8?Q?=f0=9f=91=8d?=', undef,
 );
 
 for(my $i=0; $i<@tests; $i+=3) {
