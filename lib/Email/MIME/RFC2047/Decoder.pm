@@ -1,5 +1,6 @@
 package Email::MIME::RFC2047::Decoder;
 use strict;
+use warnings;
 
 # ABSTRACT: Decoding of non-ASCII MIME headers
 

@@ -1,5 +1,6 @@
 package Email::MIME::RFC2047::Parser;
 use strict;
+use warnings;
 
 # ABSTRACT: Base class for parsers
 

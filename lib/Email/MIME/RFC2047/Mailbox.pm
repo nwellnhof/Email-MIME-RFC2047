@@ -1,5 +1,6 @@
 package Email::MIME::RFC2047::Mailbox;
 use strict;
+use warnings;
 
 # ABSTRACT: Handling of MIME encoded mailboxes
 

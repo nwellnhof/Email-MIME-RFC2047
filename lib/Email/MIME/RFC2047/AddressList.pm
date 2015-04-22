@@ -1,5 +1,6 @@
 package Email::MIME::RFC2047::AddressList;
 use strict;
+use warnings;
 
 # ABSTRACT: Handling of MIME encoded address lists
 
