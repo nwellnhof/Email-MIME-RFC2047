@@ -1,5 +1,9 @@
 Revision history for Perl extension Email::MIME::RFC2047
 
+0.93  2015-10-05
+        - Make AddressList->items work.
+          Thanks to klohner for the report.
+
 0.92  2015-04-22
         - Unicode range extended to 0x10ffff
           Thanks to Mario Paumann for the pull request
