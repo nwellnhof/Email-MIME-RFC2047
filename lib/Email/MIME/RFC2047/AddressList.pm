@@ -46,7 +46,7 @@ sub _parse_item {
 }
 
 sub items {
-    my $self;
+    my $self = shift;
 
     return @$self;
 }

@@ -18,6 +18,6 @@ for(my $i=0; $i<@tests; $i+=2) {
     my ($string, $expect) = ($tests[$i], $tests[$i+1]);
 
     my $mailbox = Email::MIME::RFC2047::MailboxList->parse($string);
-    is_deeply($mailbox, $expect, "parse $string");
+    is_deeply([ $mailbox->items ], $expect, "parse $string");
 }
 
