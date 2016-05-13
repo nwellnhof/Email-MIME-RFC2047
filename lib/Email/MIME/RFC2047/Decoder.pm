@@ -8,8 +8,9 @@ use warnings;
 use Encode ();
 use MIME::Base64 ();
 
-my $rfc_specials = '()<>\[\]:;\@\\,."';
-my $rfc_specials_no_quote = '()<>\[\]:;\@\\,.';
+# Don't include period "." to correctly handle obs-phrase.
+my $rfc_specials = '()<>\[\]:;\@\\,"';
+my $rfc_specials_no_quote = '()<>\[\]:;\@\\,';
 
 # Regex for encoded words.
 # This also checks the validity of base64 encoded data because MIME::Base64

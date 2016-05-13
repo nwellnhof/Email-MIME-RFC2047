@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 2 + 30;
+use Test::More tests => 2 + 31;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::Decoder');
@@ -30,6 +30,8 @@ my @tests = (
     '=?US-ASCII?Q?a=00b=1fc=7fd?=', 'abcd',
     # unknown encoding
     '=?foo-bar?q?unknown?=', '=?foo-bar?q?unknown?=',
+    # obsolete syntax
+    'Alfred E. Neumann', 'Alfred E. Neumann',
     # examples from the RFC
     '=?US-ASCII?Q?Keith_Moore?=', 'Keith Moore',
     '=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?=', 'Keld Jørn Simonsen',
