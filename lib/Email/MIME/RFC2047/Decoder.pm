@@ -34,7 +34,7 @@ my $encoded_word_text_re = qr/
 /x;
 
 # Same as $encoded_word_text_re but excluding RFC 822 special chars
-# Also matches after and before special chars
+# Also matches after and before special chars (why?).
 my $encoded_word_phrase_re = qr/
     (?: ^ | (?<= [\s$rfc_specials_no_quote] ) )
     = \? ( [\w-]+ ) \?
@@ -154,15 +154,9 @@ sub _decode {
 
             $result .= $text;
             
-            # make sure there is whitespace before the quoted string
-            $result .= ' ';
-
             # unquote
             $qs_content =~ s/\\(.)/$1/gs;
             $result .= $qs_content;
-
-            # make sure there is whitespace after the quoted string
-            $result .= ' ';
 
             $enc_flag = undef;
         }

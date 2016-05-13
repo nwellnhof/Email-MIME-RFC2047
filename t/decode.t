@@ -19,12 +19,12 @@ my @tests = (
     '"=?US-ASCII?Q?text?="', '=?US-ASCII?Q?text?=',
     '" =?US-ASCII?Q?text?= "', '=?US-ASCII?Q?text?=',
     '=?utf-8?Q?C=c3?= text =?US-ASCII?Q?text?=', '=?utf-8?Q?C=c3?= text text',
-    '"text"=?US-ASCII?Q?text?=', 'text =?US-ASCII?Q?text?=',
+    '"text"=?US-ASCII?Q?text?=', 'text=?US-ASCII?Q?text?=',
     # whitespace
     '  "  a  "  b  "  c  "  ', 'a b c',
     ' a "b" c ', 'a b c',
     ' a" b" c ', 'a b c',
-    ' a"b"c ', 'a b c',
+    ' a"b"c ', 'abc',
     ' =?US-ASCII?Q?text?= a =?US-ASCII?Q?text?= ', 'text a text',
     # nasty characters
     '=?US-ASCII?Q?a=00b=1fc=7fd?=', 'abcd',
