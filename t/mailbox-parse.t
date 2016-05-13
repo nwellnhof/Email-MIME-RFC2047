@@ -1,6 +1,6 @@
 use utf8;
 
-use Test::More tests => 2 + 4 * 2;
+use Test::More tests => 2 + 6 * 2;
 
 BEGIN {
     use_ok('Email::MIME::RFC2047::Mailbox');
@@ -16,6 +16,10 @@ my @tests = (
     { name => 'Keld Jørn Simonsen', address => 'keld@dkuug.dk' },
     '=?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>',
     { name => 'André Pirard', address => 'PIRARD@vm1.ulg.ac.be' },
+    '"Nick Wellnhofer" (This (is) (a) comment) <wellnhofer@aevum.de>',
+    { name => 'Nick Wellnhofer', address => 'wellnhofer@aevum.de' },
+    '"Nick" (comment) "Wellnhofer" <wellnhofer@aevum.de>',
+    { name => 'Nick Wellnhofer', address => 'wellnhofer@aevum.de' },
 );
 
 for(my $i=0; $i<@tests; $i+=2) {

@@ -54,6 +54,26 @@ my $encoded_word_phrase_re = qr/
     (?= \z | [\r\n\t $rfc_specials_no_quote] )
 /x;
 
+# Same as $encoded_word_text_re but excluding parens and backslash.
+# Also matches after and before parens.
+#my $encoded_word_comment_re = qr/
+#    (?<= [\r\n\t ()] )
+#    = \? ( [A-Za-z0-9_-]++ ) \?
+#    (?:
+#        [Bb] \?
+#        (
+#            (?:
+#                [A-Za-z0-9+\/]{2}
+#                (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
+#            )++
+#        ) |
+#        [Qq] \?
+#        ( [\x21-\x27\x2A-\x3E\x40-\x5B\x5D-\x7E]++ )
+#    )
+#    \? =
+#    (?= [\r\n\t ()] )
+#/x;
+
 my $quoted_string_re = qr/
     "
     (
@@ -63,6 +83,18 @@ my $quoted_string_re = qr/
         )*+
     )
     "
+/sx;
+
+my $comment_re = qr/
+    (
+        \(
+            (?:
+                [^()\\]++ |
+                \\ . |
+                (?-1)
+            )*+
+        \)
+    )
 /sx;
 
 sub new {
@@ -93,7 +125,7 @@ sub _decode {
     my $enc_flag;
     # use shortest match on any characters we don't want to decode
     my $regex = $mode eq 'phrase' ?
-        qr/([^$rfc_specials]*?)($encoded_word_phrase_re|$quoted_string_re)/ :
+        qr/([^$rfc_specials]*?)($encoded_word_phrase_re|$quoted_string_re|$comment_re)/ :
         qr/(.*?)($encoded_word_text_re)/s;
 
     while($$encoded_ref =~ /\G$regex/cg) {
@@ -150,7 +182,7 @@ sub _decode {
 
             $enc_flag = 1;
         }
-        else {
+        elsif(defined($qs_content)) {
             # quoted string
 
             $result .= $text;

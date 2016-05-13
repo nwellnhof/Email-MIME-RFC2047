@@ -57,7 +57,7 @@ for 'encoded-words':
 
 (1) As a replacement of 'text' tokens, for example in a Subject header
 
-(2) In comments, this case isn't handled by this module
+(2) In comments
 
 (3) As a replacement for a 'word' entity within a 'phrase', for example,
 one that precedes an address in a From, To, or Cc header
@@ -86,8 +86,6 @@ See L<Email::MIME::RFC2047::Group> for handling groups of mailboxes
 =head1 TODO
 
 Parsing of address headers is at an alpha stage at the moment.
-
-Comments as defined by RFC 822 are not supported.
 
 =cut
 
