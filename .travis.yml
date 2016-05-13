@@ -1,7 +1,7 @@
 sudo: false
 language: perl
 perl:
-  - "5.8"
+  - "5.10"
   - "5.14"
 matrix:
   include:
