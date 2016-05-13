@@ -22,10 +22,10 @@ sub new {
 
     my $self;
 
-    if(@_ >= 2) {
+    if (@_ >= 2) {
         $self = { @_ };
     }
-    elsif(ref($_[0])) {
+    elsif (ref($_[0])) {
         $self = $_[0];
     }
     else {
@@ -41,7 +41,7 @@ sub parse {
 
     my $mailbox;
 
-    if($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
+    if ($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
         $mailbox = $class->new($1);
     }
     else {
@@ -55,7 +55,7 @@ sub parse {
         $mailbox = $class->new(name => $name, address => $addr_spec);
     }
 
-    if(!ref($string) && pos($string) < length($string)) {
+    if (!ref($string) && pos($string) < length($string)) {
         return $class->_parse_error($string_ref);
     }
 
@@ -90,7 +90,7 @@ sub format {
 
     my $result;
 
-    if(!defined($name) || $name eq '') {
+    if (!defined($name) || $name eq '') {
         $result = $address;
     }
     else {

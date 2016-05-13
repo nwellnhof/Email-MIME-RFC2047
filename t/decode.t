@@ -55,7 +55,7 @@ my @tests = (
     '=?ISO-8859-1?Q?a?= =?ISO-8859-2?Q?_b?=', 'a b',
 );
 
-for(my $i=0; $i<@tests; $i+=2) {
+for (my $i=0; $i<@tests; $i+=2) {
     my ($encoded, $expect) = ($tests[$i], $tests[$i+1]);
 
     my $decoded = $decoder->decode_phrase($encoded);

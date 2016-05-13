@@ -22,7 +22,7 @@ my @tests = (
     { name => 'Nick Wellnhofer', address => 'wellnhofer@aevum.de' },
 );
 
-for(my $i=0; $i<@tests; $i+=2) {
+for (my $i=0; $i<@tests; $i+=2) {
     my ($string, $expect) = ($tests[$i], $tests[$i+1]);
 
     my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string);

@@ -128,16 +128,16 @@ sub _decode {
         qr/([^$rfc_specials]*?)($encoded_word_phrase_re|$quoted_string_re|$comment_re)/ :
         qr/(.*?)($encoded_word_text_re)/s;
 
-    while($$encoded_ref =~ /\G$regex/cg) {
+    while ($$encoded_ref =~ /\G$regex/cg) {
         my ($text, $match,
             $encoding, $b_content, $q_content,
             $qs_content) =
             ($1, $2, $3, $4, $5, $6, $7);
 
-        if(defined($encoding)) {
+        if (defined($encoding)) {
             # encoded words shouldn't be longer than 75 chars but
             # let's allow up to 255 chars
-            if(length($match) > 255) {
+            if (length($match) > 255) {
                 $result .= $text;
                 $result .= $match;
                 $enc_flag = undef;
@@ -146,7 +146,7 @@ sub _decode {
 
             my $content;
 
-            if(defined($b_content)) {
+            if (defined($b_content)) {
                 # MIME B
                 $content = MIME::Base64::decode_base64($b_content);
             }
@@ -166,7 +166,7 @@ sub _decode {
                 );
             };
 
-            if($@) {
+            if ($@) {
                 warn($@);
                 # display raw encoded word in case of errors
                 $result .= $text;
@@ -182,7 +182,7 @@ sub _decode {
 
             $enc_flag = 1;
         }
-        elsif(defined($qs_content)) {
+        elsif (defined($qs_content)) {
             # quoted string
 
             $result .= $text;

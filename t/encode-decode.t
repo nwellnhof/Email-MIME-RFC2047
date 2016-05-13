@@ -36,7 +36,7 @@ my @tests = (
     "\x{1F44D}", '=?utf-8?Q?=f0=9f=91=8d?=', undef,
 );
 
-for(my $i=0; $i<@tests; $i+=3) {
+for (my $i=0; $i<@tests; $i+=3) {
     my ($string, $expect_text, $expect_phrase) =
         ($tests[$i], $tests[$i+1], $tests[$i+2]);
     $expect_text = $string if !defined($expect_text);

@@ -15,7 +15,7 @@ sub new {
 
     my $self;
 
-    if(@_ >= 2) {
+    if (@_ >= 2) {
         $self = { @_ };
     }
     else {
@@ -41,7 +41,7 @@ sub _parse {
 
     my $mailbox_list;
     
-    if($$string_ref =~ /\G\s*;\s*/cg) {
+    if ($$string_ref =~ /\G\s*;\s*/cg) {
         $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
     }
     else {
@@ -58,7 +58,7 @@ sub _parse {
         mailbox_list => $mailbox_list,
     );
 
-    if(!ref($string) && pos($string) < length($string)) {
+    if (!ref($string) && pos($string) < length($string)) {
         return $class->_parse_error($string_ref);
     }
 

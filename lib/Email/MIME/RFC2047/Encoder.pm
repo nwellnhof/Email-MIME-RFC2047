@@ -16,7 +16,7 @@ sub new {
 
     my ($encoding, $method) = ($options->{encoding}, $options->{method});
 
-    if(!defined($encoding)) {
+    if (!defined($encoding)) {
         $encoding = 'utf-8';
         $method = 'Q' if !defined($method);
     }
@@ -70,11 +70,11 @@ sub _encode {
 
         my $word_type;
 
-        if($word =~ /[\x80-\x{10ffff}]|(^=\?.*\?=\z)/s) {
+        if ($word =~ /[\x80-\x{10ffff}]|(^=\?.*\?=\z)/s) {
             # also encode any word that starts with '=?' and ends with '?='
             $word_type = 'mime';
         }
-        elsif($mode eq 'phrase') {
+        elsif ($mode eq 'phrase') {
             $word_type = 'quoted';
         }
         else {
@@ -85,11 +85,11 @@ sub _encode {
             if $buffer ne '' && $buffer_type ne $word_type;
         $buffer_type = $word_type;
 
-        if($word_type eq 'text') {
+        if ($word_type eq 'text') {
             $result .= ' ' if $result ne '';
             $result .= $word;
         }
-        elsif($word_type eq 'quoted') {
+        elsif ($word_type eq 'quoted') {
             $buffer .= ' ' if $buffer ne '';
             $buffer .= $word;
         }
@@ -104,14 +104,14 @@ sub _encode {
             for my $char (@chars) {
                 my $chunk;
                 
-                if($self->{method} eq 'B') {
+                if ($self->{method} eq 'B') {
                     $chunk = $encoder->encode($char);
                 }
-                elsif($char =~ /[()<>@,;:\\".\[\]=?_]/) {
+                elsif ($char =~ /[()<>@,;:\\".\[\]=?_]/) {
                     # special character
                     $chunk = sprintf('=%02x', ord($char));
                 }
-                elsif($char =~ /[\x80-\x{10ffff}]/) {
+                elsif ($char =~ /[\x80-\x{10ffff}]/) {
                     # non-ASCII character
 
                     my $enc_char = $encoder->encode($char);
@@ -121,14 +121,14 @@ sub _encode {
                         $chunk .= sprintf('=%02x', $byte);
                     }
                 }
-                elsif($char eq ' ') {
+                elsif ($char eq ' ') {
                     $chunk = '_';
                 }
                 else {
                     $chunk = $char;
                 }
 
-                if(length($buffer) + length($chunk) <= $max_len) {
+                if (length($buffer) + length($chunk) <= $max_len) {
                     $buffer .= $chunk;
                 }
                 else {
@@ -150,8 +150,8 @@ sub _finish_buffer {
 
     $$result .= ' ' if $$result ne '';
 
-    if($buffer_type eq 'quoted') {
-        if($$buffer =~ /[$rfc_specials]/) {
+    if ($buffer_type eq 'quoted') {
+        if ($$buffer =~ /[$rfc_specials]/) {
             # use quoted string if buffer contains special chars
             $$buffer =~ s/[\\"]/\\$&/g;
             
@@ -161,10 +161,10 @@ sub _finish_buffer {
             $$result .= $$buffer;
         }
     }
-    elsif($buffer_type eq 'mime') {
+    elsif ($buffer_type eq 'mime') {
         $$result .= "=?$self->{encoding}?$self->{method}?";
 
-        if($self->{method} eq 'B') {
+        if ($self->{method} eq 'B') {
             $$result .= MIME::Base64::encode_base64($$buffer, '');
         }
         else {

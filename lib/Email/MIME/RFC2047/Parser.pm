@@ -12,7 +12,7 @@ sub _parse_error {
     my $pos = pos($$string_ref);
     $pos = 0 if !defined($pos);
 
-    if($pos < length($$string_ref)) {
+    if ($pos < length($$string_ref)) {
         my $char = substr($$string_ref, $pos, 1);
         $text = defined($what) ?
             "invalid $what at character '$char', pos $pos in string" :

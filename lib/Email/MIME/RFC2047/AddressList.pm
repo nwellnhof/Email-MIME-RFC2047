@@ -28,9 +28,9 @@ sub parse {
     do {
         my $address = $class->_parse_item($string_ref, $decoder); 
         push(@addresses, $address);
-    } while($$string_ref =~ /\G,/cg);
+    } while ($$string_ref =~ /\G,/cg);
     
-    if(!ref($string) && pos($string) < length($string)) {
+    if (!ref($string) && pos($string) < length($string)) {
         return $class->_parse_error($string_ref);
     }
 

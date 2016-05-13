@@ -25,14 +25,14 @@ sub parse {
 
     my $address;
 
-    if($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
+    if ($$string_ref =~ /\G\s*($addr_spec_re)\s*/cg) {
         $address = Email::MIME::RFC2047::Mailbox->new($1);
     }
     else {
         $decoder ||= Email::MIME::RFC2047::Decoder->new();
         my $name = $decoder->decode_phrase($string_ref);
 
-        if($$string_ref =~ /\G<\s*($addr_spec_re)\s*>\s*/cg) {
+        if ($$string_ref =~ /\G<\s*($addr_spec_re)\s*>\s*/cg) {
             my $addr_spec = $1;
 
             $address = Email::MIME::RFC2047::Mailbox->new(
@@ -41,13 +41,13 @@ sub parse {
 
             $address->name($name) if $name ne '';
         }
-        elsif($$string_ref =~ /\G:/cg) {
+        elsif ($$string_ref =~ /\G:/cg) {
             return $class->_parse_error($string_ref, 'group name')
                 if $name eq '';
 
             my $mailbox_list;
 
-            if($$string_ref =~ /\G\s*;\s*/cg) {
+            if ($$string_ref =~ /\G\s*;\s*/cg) {
                 $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
             }
             else {
@@ -69,7 +69,7 @@ sub parse {
         }
     }
 
-    if(!ref($string) && pos($string) < length($string)) {
+    if (!ref($string) && pos($string) < length($string)) {
         return $class->_parse_error($string_ref);
     }
 
@@ -86,7 +86,7 @@ __END__
 
  my $address = Email::MIME::RFC2047::Address->parse($string);
 
- if($address->isa('Email::MIME::RFC2047::Mailbox')) {
+ if ($address->isa('Email::MIME::RFC2047::Mailbox')) {
     print $address->name(), "\n";
     print $address->address(), "\n";
  }
