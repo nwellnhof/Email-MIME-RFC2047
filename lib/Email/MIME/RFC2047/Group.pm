@@ -40,7 +40,7 @@ sub _parse {
         or return $class->_parse_error($string_ref, 'group');
 
     my $mailbox_list;
-    
+
     if ($$string_ref =~ /\G\s*;\s*/cg) {
         $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
     }
@@ -67,7 +67,7 @@ sub _parse {
 
 sub name {
     my $self = shift;
-    
+
     my $old_name = $self->{name};
     $self->{name} = $_[0] if @_;
 
@@ -76,7 +76,7 @@ sub name {
 
 sub mailbox_list {
     my $self = shift;
-    
+
     my $old_mailbox_list = $self->{mailbox_list};
     $self->{mailbox_list} = $_[0] if @_;
 

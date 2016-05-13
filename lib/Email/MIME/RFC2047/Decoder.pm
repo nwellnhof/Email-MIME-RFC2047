@@ -186,7 +186,7 @@ sub _decode {
             # quoted string
 
             $result .= $text;
-            
+
             # unquote
             $qs_content =~ s/\\(.)/$1/gs;
             $result .= $qs_content;

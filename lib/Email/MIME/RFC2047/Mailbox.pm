@@ -64,7 +64,7 @@ sub parse {
 
 sub name {
     my $self = shift;
-    
+
     my $old_name = $self->{name};
     $self->{name} = $_[0] if @_;
 
@@ -73,7 +73,7 @@ sub name {
 
 sub address {
     my $self = shift;
-    
+
     my $old_address = $self->{address};
     $self->{address} = $_[0] if @_;
 

@@ -80,7 +80,7 @@ sub _encode {
         else {
             $word_type = 'text';
         }
-        
+
         $self->_finish_buffer(\$result, $buffer_type, \$buffer)
             if $buffer ne '' && $buffer_type ne $word_type;
         $buffer_type = $word_type;
@@ -103,7 +103,7 @@ sub _encode {
 
             for my $char (@chars) {
                 my $chunk;
-                
+
                 if ($self->{method} eq 'B') {
                     $chunk = $encoder->encode($char);
                 }
@@ -116,7 +116,7 @@ sub _encode {
 
                     my $enc_char = $encoder->encode($char);
                     $chunk = '';
-                    
+
                     for my $byte (unpack('C*', $enc_char)) {
                         $chunk .= sprintf('=%02x', $byte);
                     }
@@ -154,7 +154,7 @@ sub _finish_buffer {
         if ($$buffer =~ /[$rfc_specials]/) {
             # use quoted string if buffer contains special chars
             $$buffer =~ s/[\\"]/\\$&/g;
-            
+
             $$result .= qq("$$buffer");
         }
         else {

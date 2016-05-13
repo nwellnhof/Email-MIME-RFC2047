@@ -22,14 +22,14 @@ sub parse {
     my ($class, $string, $decoder) = @_;
     my $string_ref = ref($string) ? $string : \$string;
     $decoder ||= Email::MIME::RFC2047::Decoder->new();
-    
+
     my @addresses;
 
     do {
-        my $address = $class->_parse_item($string_ref, $decoder); 
+        my $address = $class->_parse_item($string_ref, $decoder);
         push(@addresses, $address);
     } while ($$string_ref =~ /\G,/cg);
-    
+
     if (!ref($string) && pos($string) < length($string)) {
         return $class->_parse_error($string_ref);
     }
