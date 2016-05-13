@@ -1,5 +1,12 @@
 Revision history for Perl extension Email::MIME::RFC2047
 
+0.94  2016-05-13
+        - Don't add whitespace between quoted strings.
+        - Allow period in phrase.
+        - Optimize regexes.
+        - Support RFC2822 comments.
+        - Rework documentation.
+
 0.93  2015-10-05
         - Make AddressList->items work.
           Thanks to klohner for the report.
