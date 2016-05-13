@@ -17,50 +17,50 @@ my $rfc_specials_no_quote = '()<>\[\]:;\@\\,';
 # silently ignores invalid characters.
 # Captures ($encoding, $content_b, $content_q)
 my $encoded_word_text_re = qr/
-    (?: ^ | (?<= \s ) )
-    = \? ( [\w-]+ ) \?
+    (?: ^ | (?<= [\r\n\t ] ) )
+    = \? ( [A-Za-z0-9_-]++ ) \?
     (?:
         [Bb] \?
         (
             (?:
                 [A-Za-z0-9+\/]{2}
                 (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
-            )+
+            )++
         ) |
         [Qq] \?
-        ( [^?\x00-\x20\x7f-\x{10ffff}]+ )
+        ( [\x21-\x3E\x40-\x7E]++ )
     )
     \? =
-    (?= \z | \s )
+    (?= \z | [\r\n\t ] )
 /x;
 
 # Same as $encoded_word_text_re but excluding RFC 822 special chars
 # Also matches after and before special chars (why?).
 my $encoded_word_phrase_re = qr/
-    (?: ^ | (?<= [\s$rfc_specials_no_quote] ) )
-    = \? ( [\w-]+ ) \?
+    (?: ^ | (?<= [\r\n\t $rfc_specials_no_quote] ) )
+    = \? ( [A-Za-z0-9_-]++ ) \?
     (?:
         [Bb] \?
         (
             (?:
                 [A-Za-z0-9+\/]{2}
                 (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
-            )+
+            )++
         ) |
         [Qq] \?
-        ( [^?\x00-\x20$rfc_specials\x7f-\x{10ffff}]+ )
+        ( [A-Za-z0-9!*+\/=_-]++ )
     )
     \? =
-    (?= \z | [\s$rfc_specials_no_quote] )
+    (?= \z | [\r\n\t $rfc_specials_no_quote] )
 /x;
 
 my $quoted_string_re = qr/
     "
     (
         (?:
-            [^"\\] |
+            [^"\\]++ |
             \\ .
-        )*
+        )*+
     )
     "
 /sx;
@@ -169,9 +169,9 @@ sub _decode {
     $result .= $& if $$encoded_ref =~ /\G$regex/cg;
 
     # normalize whitespace
-    $result =~ s/^\s+//;
-    $result =~ s/\s+\z//;
-    $result =~ s/\s+/ /g;
+    $result =~ s/^[\r\n\t ]+//;
+    $result =~ s/[\r\n\t ]+\z//;
+    $result =~ s/[\r\n\t ]+/ /g;
 
     # remove potentially dangerous ASCII control chars
     $result =~ s/[\x00-\x1f\x7f]//g;
