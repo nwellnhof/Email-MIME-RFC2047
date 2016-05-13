@@ -109,65 +109,65 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::Mailbox;
+    use Email::MIME::RFC2047::Mailbox;
 
- my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string);
- print $mailbox->name(), "\n";
- print $mailbox->address(), "\n";
+    my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string);
+    print $mailbox->name(), "\n";
+    print $mailbox->address(), "\n";
 
- my $mailbox = Email::MIME::RFC2047::Mailbox->new(
-    name => $name,
-    address => $address,
- );
- $email->header_set('To', $mailbox->format());
+    my $mailbox = Email::MIME::RFC2047::Mailbox->new(
+       name => $name,
+       address => $address,
+    );
+    $email->header_set('To', $mailbox->format());
 
 =head1 DESCRIPTION
 
-This module handles RFC 2822 'mailboxes'.
+This module handles RFC 2822 C<mailbox>es.
 
 =head1 CLASS METHODS
 
 =head2 parse
 
- my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string, [$decoder])
+    my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string, [$decoder])
 
-Parse a RFC 2822 'mailbox'. Returns a Email::MIME::RFC2047::Mailbox object.
+Parse a RFC 2822 C<mailbox>. Returns a Email::MIME::RFC2047::Mailbox object.
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
- my $mailbox = Email::MIME::RFC2047::Mailbox->new(
-    name => $name,
-    address => $address,
- );
+    my $mailbox = Email::MIME::RFC2047::Mailbox->new(
+       name => $name,
+       address => $address,
+    );
 
-Creates a new Email::MIME::RFC2047::Mailbox object, optionally  with a
-display name $name and an email address $address.
+Creates a new Email::MIME::RFC2047::Mailbox object, optionally with a
+display name C<$name> and an email address C<$address>.
 
 =head1 METHODS
 
 =head2 name
 
- my $name = $mailbox->name();
- $mailbox->name($new_name);
+    my $name = $mailbox->name();
+    $mailbox->name($new_name);
 
 Gets or sets the display name of the mailbox.
 
 =head2 address
 
- my $address = $mailbox->address();
- $mailbox->address($new_address);
+    my $address = $mailbox->address();
+    $mailbox->address($new_address);
 
 Gets or sets the email address of the mailbox.
 
 =head2 format
 
- my $string = $mailbox->format([$encoder]);
+    my $string = $mailbox->format([$encoder]);
 
 Returns the formatted mailbox string for use in a message header.
 
-$encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
+C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
 
 =cut

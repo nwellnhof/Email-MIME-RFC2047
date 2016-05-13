@@ -82,14 +82,14 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::Address;
+    use Email::MIME::RFC2047::Address;
 
- my $address = Email::MIME::RFC2047::Address->parse($string);
+    my $address = Email::MIME::RFC2047::Address->parse($string);
 
- if ($address->isa('Email::MIME::RFC2047::Mailbox')) {
-    print $address->name(), "\n";
-    print $address->address(), "\n";
- }
+    if ($address->isa('Email::MIME::RFC2047::Mailbox')) {
+       print $address->name(), "\n";
+       print $address->address(), "\n";
+    }
 
 =head1 DESCRIPTION
 
@@ -100,10 +100,10 @@ L<Email::MIME::RFC2047::Group>.
 
 =head2 parse
 
- my $address = Email::MIME::RFC2047::Address->parse($string, [$decoder])
+    my $address = Email::MIME::RFC2047::Address->parse($string, [$decoder])
 
-Parses a RFC 2822 'address'. Returns either a L<Email::MIME::RFC2047::Mailbox>
-or a L<Email::MIME::RFC2047::Group> object.
+Parses a RFC 2822 C<address>. Returns either a
+L<Email::MIME::RFC2047::Mailbox> or a L<Email::MIME::RFC2047::Group> object.
 
 =cut
 

@@ -106,53 +106,53 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::Group;
+    use Email::MIME::RFC2047::Group;
 
- my $group = Email::MIME::RFC2047::Group->new(
-    name => $name,
-    mailbox_list => $mailbox_list,
- );
- $email->header_set('To', $group->format());
+    my $group = Email::MIME::RFC2047::Group->new(
+       name => $name,
+       mailbox_list => $mailbox_list,
+    );
+    $email->header_set('To', $group->format());
 
 =head1 DESCRIPTION
 
-This module handles RFC 2822 'groups'.
+This module handles RFC 2822 C<group>s.
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
- my $group = Email::MIME::RFC2047::Group->new(
-    name => $name,
-    mailbox_list => $mailbox_list,
- );
+    my $group = Email::MIME::RFC2047::Group->new(
+       name => $name,
+       mailbox_list => $mailbox_list,
+    );
 
 Creates a new Email::MIME::RFC2047::Group object, optionally with a
-display name $name and an mailbox list $mailbox_list.
+display name C<$name> and an mailbox list C<$mailbox_list>.
 
 =head1 METHODS
 
 =head2 name
 
- my $name = $group->name();
- $group->name($new_name);
+    my $name = $group->name();
+    $group->name($new_name);
 
 Gets or sets the display name of the group.
 
 =head2 mailbox_list
 
- my $mailbox_list = $group->mailbox_list();
- $group->mailbox_list($new_mailbox_list);
+    my $mailbox_list = $group->mailbox_list();
+    $group->mailbox_list($new_mailbox_list);
 
 Gets or sets the mailbox list of the group.
 
 =head2 format
 
- my $string = $group->format([$encoder]);
+    my $string = $group->format([$encoder]);
 
 Returns the formatted string for use in a message header.
 
-$encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
+C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
 encoding display names with non-ASCII characters.
 
 =cut

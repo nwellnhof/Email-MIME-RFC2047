@@ -185,15 +185,15 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::Encoder;
- 
- my $encoder = Email::MIME::RFC2047::Encoder->new(
-     encoding => 'utf-8',
-     method   => 'Q',
- );
- 
- my $encoded_text   = $encoder->encode_text($string);
- my $encoded_phrase = $encoder->encode_phrase($string);
+    use Email::MIME::RFC2047::Encoder;
+
+    my $encoder = Email::MIME::RFC2047::Encoder->new(
+        encoding => 'utf-8',
+        method   => 'Q',
+    );
+
+    my $encoded_text   = $encoder->encode_text($string);
+    my $encoded_phrase = $encoder->encode_phrase($string);
 
 =head1 DESCRIPTION
 
@@ -204,51 +204,52 @@ RFC 2047.
 
 =head2 new
 
- my $encoder = Email::MIME::RFC2047::Encoder->new(
-     encoding => $encoding,
-     method   => $method,
- );
+    my $encoder = Email::MIME::RFC2047::Encoder->new(
+        encoding => $encoding,
+        method   => $method,
+    );
 
 Creates a new encoder object.
 
-I<encoding> specifies the encoding ("character set" in the RFC) to use. This is
-passed to the L<Encode> module. See L<Encode::Supported> for supported
-encodings.
+I<encoding> specifies the encoding ("character set" in the RFC) to use. This
+is passed to L<Encode>. See L<Encode::Supported> for supported encodings.
 
-I<method> specifies the encoding method ("encoding" in the RFC). Must be either
-'B' or 'Q'.
+I<method> specifies the encoding method ("encoding" in the RFC). Must be
+either C<'B'> or C<'Q'>.
 
-If both I<encoding> and I<method> are omitted, encoding defaults to 'utf-8'
-and method to 'Q'. If only I<encoding> is omitted it defaults to 'utf-8'.
-If only I<method> is omitted it defaults to 'B'.
+If both I<encoding> and I<method> are omitted, encoding defaults to
+C<'utf-8'> and method to C<'Q'>. If only I<encoding> is omitted, it defaults
+to C<'utf-8'>. If only I<method> is omitted, it defaults to C<'B'>.
 
 =head1 METHODS
 
 =head2 encode_text
 
- my $encoded_text = $encoder->encode_text($string);
+    my $encoded_text = $encoder->encode_text($string);
 
-Encodes a string that may replace a sequence of 'text' tokens (as defined by
-RFC 822) in any Subject or Comments header field, any extension message header
-field, or any MIME body part field for which the field body is defined as
-'*text'. $string is expected to be an unencoded perl string.
+Encodes a string for use in any I<Subject> or I<Comments> header field, any
+extension message header field, or any MIME body part field for which the
+field body is defined as C<unstructured> (RFC 2822) or C<*text> (RFC 822).
+C<$string> is expected to be an unencoded perl string.
 
 This method tries to use the MIME encoding for as few characters of the
-input string as possible. So the result may consist of a mix of
-'encoded-words' and '*text'.
+input string as possible. So the result may consist of a mix of encoded and
+unencoded words.
 
-The source string is trimmed and any whitespace is collapsed. The words in the
-result are separated by single space characters without folding of long lines.
+The source string is trimmed and any whitespace is collapsed. The words in
+the result are separated by single space characters without folding of long
+lines.
 
 =head2 encode_phrase
 
- my $encoded_phrase = $encoder->encode_phrase($string);
+    my $encoded_phrase = $encoder->encode_phrase($string);
 
-Encodes a string that may replace a 'phrase' token (as defined by RFC 822),
-for example, one that precedes an address in a From, To, or Cc header.
+Encodes a string that may replace a C<phrase> token (as defined by RFC 2822),
+for example, one that precedes an address in a I<From>, I<To>, or I<Cc>
+header.
 
 This method works like I<encode_text> but additionally converts remaining
-text that contains special characters to 'quoted-strings'.
+text that contains special characters to C<quoted-string>s.
 
 =cut
 

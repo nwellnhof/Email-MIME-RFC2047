@@ -34,7 +34,7 @@ my $encoded_word_text_re = qr/
     (?= \z | [\r\n\t ] )
 /x;
 
-# Same as $encoded_word_text_re but excluding RFC 822 special chars
+# Same as $encoded_word_text_re but excluding RFC 2822 special chars
 # Also matches after and before special chars (why?).
 my $encoded_word_phrase_re = qr/
     (?: ^ | (?<= [\r\n\t $rfc_specials_no_quote] ) )
@@ -217,12 +217,12 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::Decoder;
- 
- my $decoder = Email::MIME::RFC2047::Decoder->new();
- 
- my $string = $decoder->decode_text($encoded_text);
- my $string = $decoder->decode_phrase($encoded_phrase);
+    use Email::MIME::RFC2047::Decoder;
+
+    my $decoder = Email::MIME::RFC2047::Decoder->new();
+
+    my $string = $decoder->decode_text($encoded_text);
+    my $string = $decoder->decode_phrase($encoded_phrase);
 
 =head1 DESCRIPTION
 
@@ -233,7 +233,7 @@ text according to RFC 2047.
 
 =head2 new
 
- my $decoder = Email::MIME::RFC2047::Decoder->new();
+    my $decoder = Email::MIME::RFC2047::Decoder->new();
 
 Creates a new decoder object.
 
@@ -241,28 +241,34 @@ Creates a new decoder object.
 
 =head2 decode_text
 
- my $string = $decoder->decode_text($encoded_text);
+    my $string = $decoder->decode_text($encoded_text);
 
-Decodes any MIME header field for which the field body is defined as '*text'
-(as defined by RFC 822), for example, any Subject or Comments header field.
+Decodes any MIME header field for which the field body is defined as
+C<unstructured> (RFC 2822) or C<*text> (RFC 822), for example, any
+I<Subject> or I<Comments> header field.
 
-$encoded_text can also be a reference to a scalar. In this case the scalar
-is processed starting from the current search position. See L<perlfunc/pos>.
- 
-The resulting string is trimmed and any whitespace is collapsed.
+C<$encoded_text> can also be a reference to a scalar. In this case the
+scalar is processed starting from the current search position. See
+L<perlfunc/pos>.
+
+The resulting string is trimmed and any whitespace is collapsed. This means
+that lines separated by folding whitespace are unfolded. Folding whitespace
+is not checked for syntactical correctness. Newlines are treated like
+normal whitespace.
 
 =head2 decode_phrase
 
- my $string = $decoder->decode_phrase($encoded_phrase);
+    my $string = $decoder->decode_phrase($encoded_phrase);
 
-Decodes any 'phrase' token (as defined by RFC 822) in a MIME header field,
-for example, one that precedes an address in a From, To, or Cc header.
+Decodes any C<phrase> token (as defined by RFC 2822) in a MIME header field,
+for example, one that precedes an address in a I<From>, I<To>, or I<Cc>
+header.
 
 This method works like I<decode_text> but additionally unquotes any
-'quoted-strings'. It also stops at any special character as defined by
-RFC 822. If $encoded_phrase is a reference to a scalar the current search
-position is set accordingly. This is helpful when parsing RFC 822 address
-headers.
+C<quoted-string>s. It also stops at any special character as defined by
+RFC 2822, excluding the period character ".". If C<$encoded_phrase> is a
+reference to a scalar, the current search position is set accordingly. This
+is helpful when parsing RFC 2822 address headers.
 
 =cut
 

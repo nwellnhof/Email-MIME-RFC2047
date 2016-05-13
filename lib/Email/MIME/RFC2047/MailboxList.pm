@@ -23,18 +23,18 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::MailboxList;
+    use Email::MIME::RFC2047::MailboxList;
 
- my $mailbox_list = Email::MIME::RFC2047::MailboxList->parse($string);
- my @items = $mailbox_list->items();
+    my $mailbox_list = Email::MIME::RFC2047::MailboxList->parse($string);
+    my @items = $mailbox_list->items();
 
- my $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
- $mailbox_list->push($mailbox);
- $email->header_set('To', $mailbox_list->format());
+    my $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
+    $mailbox_list->push($mailbox);
+    $email->header_set('To', $mailbox_list->format());
 
 =head1 DESCRIPTION
 
-This module handles RFC 2822 'mailbox-lists'. It is a subclass of
+This module handles RFC 2822 C<mailbox-list>s. It is a subclass of
 L<Email::MIME::RFC2047::AddressList> and works the same but only allows
 L<Email::MIME::RFC2047::Mailbox> items.
 

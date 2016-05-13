@@ -72,57 +72,58 @@ __END__
 
 =head1 SYNOPSIS
 
- use Email::MIME::RFC2047::AddressList;
+    use Email::MIME::RFC2047::AddressList;
 
- my $address_list = Email::MIME::RFC2047::AddressList->parse($string);
- my @items = $address_list->items();
+    my $address_list = Email::MIME::RFC2047::AddressList->parse($string);
+    my @items = $address_list->items();
 
- my $address_list = Email::MIME::RFC2047::AddressList->new();
- $address_list->push($mailbox);
- $address_list->push($group);
- $email->header_set('To', $address_list->format());
+    my $address_list = Email::MIME::RFC2047::AddressList->new();
+    $address_list->push($mailbox);
+    $address_list->push($group);
+    $email->header_set('To', $address_list->format());
 
 =head1 DESCRIPTION
 
-This module handles RFC 2822 'address-lists'.
+This module handles RFC 2822 C<address-list>s.
 
 =head1 CLASS METHODS
 
 =head2 parse
 
- my $address_list = Email::MIME::RFC2047::AddressList->parse(
-    $string, [$decoder]
- );
+    my $address_list = Email::MIME::RFC2047::AddressList->parse(
+       $string, [$decoder]
+    );
 
-Parse a RFC 2822 'address-list'. Returns a Email::MIME::RFC2047::AddressList
-object containing L<Email::MIME::RFC2047::Address> items.
+Parse a RFC 2822 C<address-list>. Returns an
+Email::MIME::RFC2047::AddressList object containing
+L<Email::MIME::RFC2047::Address> items.
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
- my $address_list = Email::MIME::RFC2047::AddressList->new([@items]);
+    my $address_list = Email::MIME::RFC2047::AddressList->new([@items]);
 
 Creates a new Email::MIME::RFC2047::AddressList object, with optional items
-@items.
+C<@items>.
 
 =head1 METHODS
 
 =head2 items
 
- my @items = $address_list->items();
+    my @items = $address_list->items();
 
 Gets the items of the address list.
 
 =head2 push
 
- $address_list->address(@items);
+    $address_list->push(@items);
 
 Appends items to the address list.
 
 =head2 format
 
- my $string = $address_list->format([$encoder]);
+    my $string = $address_list->format([$encoder]);
 
 Returns the formatted address list string for use in a message header.
 
