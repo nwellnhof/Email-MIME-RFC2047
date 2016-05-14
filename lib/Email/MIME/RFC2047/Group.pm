@@ -25,45 +25,44 @@ sub new {
     return bless($self, $class);
 }
 
-# unused
-sub _parse {
-    my ($class, $string, $decoder) = @_;
-    my $string_ref = ref($string) ? $string : \$string;
-
-    $decoder ||= Email::MIME::RFC2047::Decoder->new();
-
-    my $name = $decoder->decode_phrase($string_ref);
-    return $class->_parse_error($string_ref, 'group name')
-        if $name eq '';
-
-    $$string_ref =~ /\G:/cg
-        or return $class->_parse_error($string_ref, 'group');
-
-    my $mailbox_list;
-
-    if ($$string_ref =~ /\G\s*;\s*/cg) {
-        $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
-    }
-    else {
-        $mailbox_list = Email::MIME::RFC2047::MailboxList->parse(
-            $string_ref, $decoder
-        );
-
-        $$string_ref =~ /\G;\s*/cg
-            or return $class->_parse_error($string_ref, 'group');
-    }
-
-    my $group = $class->new(
-        name         => $name,
-        mailbox_list => $mailbox_list,
-    );
-
-    if (!ref($string) && pos($string) < length($string)) {
-        return $class->_parse_error($string_ref);
-    }
-
-    return $group;
-}
+#sub _parse {
+#    my ($class, $string, $decoder) = @_;
+#    my $string_ref = ref($string) ? $string : \$string;
+#
+#    $decoder ||= Email::MIME::RFC2047::Decoder->new();
+#
+#    my $name = $decoder->decode_phrase($string_ref);
+#    return $class->_parse_error($string_ref, 'group name')
+#        if $name eq '';
+#
+#    $$string_ref =~ /\G:/cg
+#        or return $class->_parse_error($string_ref, 'group');
+#
+#    my $mailbox_list;
+#
+#    if ($$string_ref =~ /\G\s*;\s*/cg) {
+#        $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
+#    }
+#    else {
+#        $mailbox_list = Email::MIME::RFC2047::MailboxList->parse(
+#            $string_ref, $decoder
+#        );
+#
+#        $$string_ref =~ /\G;\s*/cg
+#            or return $class->_parse_error($string_ref, 'group');
+#    }
+#
+#    my $group = $class->new(
+#        name         => $name,
+#        mailbox_list => $mailbox_list,
+#    );
+#
+#    if (!ref($string) && pos($string) < length($string)) {
+#        return $class->_parse_error($string_ref);
+#    }
+#
+#    return $group;
+#}
 
 sub name {
     my $self = shift;
