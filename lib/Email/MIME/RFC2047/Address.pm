@@ -87,9 +87,11 @@ __END__
     my $address = Email::MIME::RFC2047::Address->parse($string);
 
     if ($address->isa('Email::MIME::RFC2047::Mailbox')) {
-       print $address->name(), "\n";
-       print $address->address(), "\n";
+        print $address->name,    "\n";
+        print $address->address, "\n";
     }
+
+    my $string = $address->format;
 
 =head1 DESCRIPTION
 
@@ -104,6 +106,20 @@ L<Email::MIME::RFC2047::Group>.
 
 Parses a RFC 2822 C<address>. Returns either a
 L<Email::MIME::RFC2047::Mailbox> or a L<Email::MIME::RFC2047::Group> object.
+C<$decoder> is an optional L<Email::MIME::RFC2047::Decoder>. If it isn't
+provided, a new temporary decoder is used.
+
+=head1 METHODS
+
+=head2 format
+
+    my $string = $address->format([$encoder]);
+
+Returns the formatted address string for use in a message header.
+
+C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
+encoding display names with non-ASCII characters. If it isn't provided, a
+default UTF-8 encoder will be used.
 
 =cut
 

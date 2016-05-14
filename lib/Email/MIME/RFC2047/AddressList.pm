@@ -75,7 +75,7 @@ __END__
     use Email::MIME::RFC2047::AddressList;
 
     my $address_list = Email::MIME::RFC2047::AddressList->parse($string);
-    my @items = $address_list->items();
+    my @items = $address_list->items;
 
     my $address_list = Email::MIME::RFC2047::AddressList->new();
     $address_list->push($mailbox);
@@ -91,12 +91,14 @@ This module handles RFC 2822 C<address-list>s.
 =head2 parse
 
     my $address_list = Email::MIME::RFC2047::AddressList->parse(
-       $string, [$decoder]
+        $string, [$decoder]
     );
 
 Parse a RFC 2822 C<address-list>. Returns an
 Email::MIME::RFC2047::AddressList object containing
 L<Email::MIME::RFC2047::Address> items.
+C<$decoder> is an optional L<Email::MIME::RFC2047::Decoder>. If it isn't
+provided, a new temporary decoder is used.
 
 =head1 CONSTRUCTOR
 
@@ -111,7 +113,7 @@ C<@items>.
 
 =head2 items
 
-    my @items = $address_list->items();
+    my @items = $address_list->items;
 
 Gets the items of the address list.
 
@@ -127,8 +129,9 @@ Appends items to the address list.
 
 Returns the formatted address list string for use in a message header.
 
-$encoder is an optional L<Email::MIME::RFC2047::Encoder> object used for
-encoding display names with non-ASCII characters.
+C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
+encoding display names with non-ASCII characters. If it isn't provided, a
+default UTF-8 encoder will be used.
 
 =cut
 

@@ -26,7 +26,7 @@ __END__
     use Email::MIME::RFC2047::MailboxList;
 
     my $mailbox_list = Email::MIME::RFC2047::MailboxList->parse($string);
-    my @items = $mailbox_list->items();
+    my @items = $mailbox_list->items;
 
     my $mailbox_list = Email::MIME::RFC2047::MailboxList->new();
     $mailbox_list->push($mailbox);

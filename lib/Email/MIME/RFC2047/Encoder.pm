@@ -230,7 +230,7 @@ to C<'utf-8'>. If only I<method> is omitted, it defaults to C<'B'>.
 Encodes a string for use in any I<Subject> or I<Comments> header field, any
 extension message header field, or any MIME body part field for which the
 field body is defined as C<unstructured> (RFC 2822) or C<*text> (RFC 822).
-C<$string> is expected to be an unencoded perl string.
+C<$string> is expected to be an unencoded Perl string.
 
 This method tries to use the MIME encoding for as few characters of the
 input string as possible. So the result may consist of a mix of encoded and

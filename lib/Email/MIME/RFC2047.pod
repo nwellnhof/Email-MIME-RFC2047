@@ -21,8 +21,8 @@
     );
 
     my $to_address = Email::MIME::RFC2047::Mailbox->new(
-       name    => $non_ascii_name,
-       address => $email_address,
+        name    => $non_ascii_name,
+        address => $email_address,
     );
     $email->header_set(To => $to_address->format($encoder));
 
@@ -36,7 +36,7 @@
     my $subject = $decoder->decode_text($email->header('Subject'));
 
     my $to_address = Email::MIME::RFC2047::AddressList->parse(
-       $email->header('To')
+        $email->header('To')
     );
 
 =head1 DESCRIPTION

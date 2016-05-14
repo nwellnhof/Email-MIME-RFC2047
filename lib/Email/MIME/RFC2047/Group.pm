@@ -108,9 +108,13 @@ __END__
 
     use Email::MIME::RFC2047::Group;
 
+    my $group = Email::MIME::RFC2047::Group->parse($string);
+    print $group->name, "\n";
+    my @mailboxes = $group->mailbox_list->items;
+
     my $group = Email::MIME::RFC2047::Group->new(
-       name => $name,
-       mailbox_list => $mailbox_list,
+        name         => $name,
+        mailbox_list => $mailbox_list,
     );
     $email->header_set('To', $group->format());
 
@@ -123,8 +127,8 @@ This module handles RFC 2822 C<group>s.
 =head2 new
 
     my $group = Email::MIME::RFC2047::Group->new(
-       name => $name,
-       mailbox_list => $mailbox_list,
+        name         => $name,
+        mailbox_list => $mailbox_list,
     );
 
 Creates a new Email::MIME::RFC2047::Group object, optionally with a
@@ -134,14 +138,14 @@ display name C<$name> and an mailbox list C<$mailbox_list>.
 
 =head2 name
 
-    my $name = $group->name();
+    my $name = $group->name;
     $group->name($new_name);
 
 Gets or sets the display name of the group.
 
 =head2 mailbox_list
 
-    my $mailbox_list = $group->mailbox_list();
+    my $mailbox_list = $group->mailbox_list;
     $group->mailbox_list($new_mailbox_list);
 
 Gets or sets the mailbox list of the group.
@@ -153,7 +157,8 @@ Gets or sets the mailbox list of the group.
 Returns the formatted string for use in a message header.
 
 C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
-encoding display names with non-ASCII characters.
+encoding display names with non-ASCII characters. If it isn't provided, a
+default UTF-8 encoder is used.
 
 =cut
 

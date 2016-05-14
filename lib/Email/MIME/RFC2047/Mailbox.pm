@@ -112,12 +112,12 @@ __END__
     use Email::MIME::RFC2047::Mailbox;
 
     my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string);
-    print $mailbox->name(), "\n";
-    print $mailbox->address(), "\n";
+    print $mailbox->name,    "\n";
+    print $mailbox->address, "\n";
 
     my $mailbox = Email::MIME::RFC2047::Mailbox->new(
-       name => $name,
-       address => $address,
+        name    => $name,
+        address => $address,
     );
     $email->header_set('To', $mailbox->format());
 
@@ -132,14 +132,16 @@ This module handles RFC 2822 C<mailbox>es.
     my $mailbox = Email::MIME::RFC2047::Mailbox->parse($string, [$decoder])
 
 Parse a RFC 2822 C<mailbox>. Returns a Email::MIME::RFC2047::Mailbox object.
+C<$decoder> is an optional L<Email::MIME::RFC2047::Decoder>. If it isn't
+provided, a new temporary decoder is used.
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
     my $mailbox = Email::MIME::RFC2047::Mailbox->new(
-       name => $name,
-       address => $address,
+        name    => $name,
+        address => $address,
     );
 
 Creates a new Email::MIME::RFC2047::Mailbox object, optionally with a
@@ -149,14 +151,14 @@ display name C<$name> and an email address C<$address>.
 
 =head2 name
 
-    my $name = $mailbox->name();
+    my $name = $mailbox->name;
     $mailbox->name($new_name);
 
 Gets or sets the display name of the mailbox.
 
 =head2 address
 
-    my $address = $mailbox->address();
+    my $address = $mailbox->address;
     $mailbox->address($new_address);
 
 Gets or sets the email address of the mailbox.
@@ -168,7 +170,8 @@ Gets or sets the email address of the mailbox.
 Returns the formatted mailbox string for use in a message header.
 
 C<$encoder> is an optional L<Email::MIME::RFC2047::Encoder> object used for
-encoding display names with non-ASCII characters.
+encoding display names with non-ASCII characters. If it isn't provided, a
+default UTF-8 encoder will be used.
 
 =cut
 

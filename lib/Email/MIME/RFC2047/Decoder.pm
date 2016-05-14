@@ -247,7 +247,7 @@ Decodes any MIME header field for which the field body is defined as
 C<unstructured> (RFC 2822) or C<*text> (RFC 822), for example, any
 I<Subject> or I<Comments> header field.
 
-C<$encoded_text> can also be a reference to a scalar. In this case the
+C<$encoded_text> can also be a reference to a scalar. In this case, the
 scalar is processed starting from the current search position. See
 L<perlfunc/pos>.
 
@@ -266,9 +266,10 @@ header.
 
 This method works like I<decode_text> but additionally unquotes any
 C<quoted-string>s. It also stops at any special character as defined by
-RFC 2822, excluding the period character ".". If C<$encoded_phrase> is a
-reference to a scalar, the current search position is set accordingly. This
-is helpful when parsing RFC 2822 address headers.
+RFC 2822, excluding the period character "." and the double quote '"'.
+If C<$encoded_phrase> is a reference to a scalar, the current search
+position is set accordingly. This is helpful when parsing RFC 2822 address
+headers.
 
 =cut
 
