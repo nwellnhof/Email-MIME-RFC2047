@@ -1,3 +1,4 @@
+use strict;
 use utf8;
 
 use Test::More tests => 4 + 13 * 4;
