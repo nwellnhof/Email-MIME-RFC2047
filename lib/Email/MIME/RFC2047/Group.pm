@@ -3,7 +3,7 @@ package Email::MIME::RFC2047::Group;
 use strict;
 use warnings;
 
-# ABSTRACT: Handling of MIME encoded mailbox groups
+# ABSTRACT: MIME encoded mailbox groups
 
 use base qw(Email::MIME::RFC2047::Address);
 

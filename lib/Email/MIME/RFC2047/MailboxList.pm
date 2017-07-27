@@ -3,7 +3,7 @@ package Email::MIME::RFC2047::MailboxList;
 use strict;
 use warnings;
 
-# ABSTRACT: Handling of MIME encoded mailbox lists
+# ABSTRACT: MIME encoded mailbox lists
 
 use base qw(Email::MIME::RFC2047::AddressList);
 

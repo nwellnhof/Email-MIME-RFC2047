@@ -3,7 +3,7 @@ package Email::MIME::RFC2047::Address;
 use strict;
 use warnings;
 
-# ABSTRACT: Handling of MIME encoded addresses
+# ABSTRACT: MIME encoded addresses
 
 use base qw(Email::MIME::RFC2047::Parser);
 
