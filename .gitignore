@@ -1,4 +1,3 @@
-.*.swp
 .build/
 Email-MIME-RFC2047-*/
 Email-MIME-RFC2047-*.tar.gz
