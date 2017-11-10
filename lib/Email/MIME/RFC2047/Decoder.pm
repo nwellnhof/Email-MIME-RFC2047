@@ -18,17 +18,17 @@ my $rfc_specials_no_quote = '()<>\[\]:;\@\\,';
 # Captures ($encoding, $content_b, $content_q)
 my $encoded_word_text_re = qr/
     (?: ^ | (?<= [\r\n\t ] ) )
-    = \? ( [A-Za-z0-9_-]++ ) \?
+    = \? ( (?>[A-Za-z0-9_-]+) ) \?
     (?:
         [Bb] \?
         (
-            (?:
+            (?>(?:
                 [A-Za-z0-9+\/]{2}
                 (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
-            )++
+            )+)
         ) |
         [Qq] \?
-        ( [\x21-\x3E\x40-\x7E]++ )
+        ( (?>[\x21-\x3E\x40-\x7E]+) )
     )
     \? =
     (?= \z | [\r\n\t ] )
@@ -38,17 +38,17 @@ my $encoded_word_text_re = qr/
 # Also matches after and before special chars (why?).
 my $encoded_word_phrase_re = qr/
     (?: ^ | (?<= [\r\n\t $rfc_specials_no_quote] ) )
-    = \? ( [A-Za-z0-9_-]++ ) \?
+    = \? ( (?>[A-Za-z0-9_-]+) ) \?
     (?:
         [Bb] \?
         (
-            (?:
+            (?>(?:
                 [A-Za-z0-9+\/]{2}
                 (?: == | [A-Za-z0-9+\/] [A-Za-z0-9+\/=] )
-            )++
+            )+)
         ) |
         [Qq] \?
-        ( [A-Za-z0-9!*+\/=_-]++ )
+        ( (?>[A-Za-z0-9!*+\/=_-]+) )
     )
     \? =
     (?= \z | [\r\n\t $rfc_specials_no_quote] )
@@ -77,10 +77,10 @@ my $encoded_word_phrase_re = qr/
 my $quoted_string_re = qr/
     "
     (
-        (?:
-            [^"\\]++ |
+        (?>(?:
+            (?>[^"\\]+) |
             \\ .
-        )*+
+        )*)
     )
     "
 /sx;
@@ -88,11 +88,11 @@ my $quoted_string_re = qr/
 my $comment_re = qr/
     (
         \(
-            (?:
-                [^()\\]++ |
+            (?>(?:
+                (?>[^()\\]+) |
                 \\ . |
                 (?-1)
-            )*+
+            )*)
         \)
     )
 /sx;
