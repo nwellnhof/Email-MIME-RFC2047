@@ -85,13 +85,16 @@ my $quoted_string_re = qr/
     "
 /sx;
 
-my $comment_re = qr/
+our $COMMENT_RE;
+my $nested_comment_expression
+    = $^V lt v5.10.0 ? qr/(??{ $COMMENT_RE })/ : '(?-1)';
+my $comment_re = $COMMENT_RE = qr/
     (
         \(
             (?>(?:
                 (?>[^()\\]+) |
                 \\ . |
-                (?-1)
+                $nested_comment_expression
             )*)
         \)
     )
